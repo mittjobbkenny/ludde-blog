@@ -1,4 +1,9 @@
-from django.http import HttpResponse
+from django.views import generic
+from blog .models import Post
 
-def home(request):
-    return HttpResponse("Hello, home!")
+
+class Home(generic.ListView):
+
+    model = Post
+    queryset = Post.objects.order_by('-created_on')
+    template_name = 'home/index.html'
