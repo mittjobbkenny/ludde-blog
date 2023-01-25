@@ -4,10 +4,9 @@
 <h1>Bloggen</h1>
 {% for post in post_list %}
 
-<p>{{ post.title }}</p>
+<a href="{% url 'post_detail' post.slug post.pk %}" class="post-link">{{ post.title }}</a>
 <p>{{ post.created_on }}</p>
-<img src=" {{ post.featured_image.url }}" alt="img" style="height: 100xp; width: 100px;">
-<p>{{ post.content }}</p>
+
 {% endfor %}
 
 {% endblock %}

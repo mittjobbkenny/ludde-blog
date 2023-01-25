@@ -15,10 +15,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <title>Ludde Blog</title>
 </head>
 
 <body>
+
+    <nav class="navbar fixed-top navbar-expand-lg bg-white border-bottom d-none d-lg-flex">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}"><i class="fa-solid fa-heart text-danger"></i> Ludde</a>
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Hem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog' %}">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Kontakt</a>
+                    </li>
+                </ul>
+                <form class="d-flex w-50" role="search">
+                    <input class="form-control rounded-0 rounded-start border-0 bg-body-secondary" type="search"
+                        placeholder="Search" aria-label="Search">
+                    <button class="btn btn-dark rounded-0 rounded-end" type="submit"><i
+                            class="fas fa-search"></i></button>
+                </form>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% include 'includes/mobile-nav.html' %}
+
+
+
+
+
 
 
     <main>

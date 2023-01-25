@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p>{{ post.title }}</p>
+<p>{{ post.created_on }}</p>
+<img src=" {{ post.featured_image.url }}" alt="img" style="height: 100xp; width: 100px;">
+<p>{{ post.content }}</p>
+
+<hr>
+
+{% for comment in comments %}
+
+<p>{{ comment.author }}</p>
+<p>{{ comment.body }}</p>
+<hr>
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ comment_form }}
+    <br>
+    <button type="submit" class="btn btn-dark">Lägg till</button>
+</form>
+
+{% endblock %}
