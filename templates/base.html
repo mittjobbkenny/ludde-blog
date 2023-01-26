@@ -43,12 +43,15 @@
                             class="fas fa-search"></i></button>
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}">Logga ut</a>
                     </li>
+                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="{% url 'account_login' %}">Logga in</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -57,8 +60,8 @@
     {% include 'includes/mobile-nav.html' %}
 
     <main>
-    {% block content %}
-    {% endblock content %}
+        {% block content %}
+        {% endblock content %}
     </main>
 
     <footer class="mt-auto bg-dark"></footer>
