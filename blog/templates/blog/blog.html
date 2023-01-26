@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Bloggen</h1>
-{% for post in post_list %}
-
-<a href="{% url 'post_detail' post.slug post.pk %}" class="post-link">{{ post.title }}</a>
-<p>{{ post.created_on }}</p>
-
-{% endfor %}
+<div class="container">
+    <div class="row mt-4">
+        {% for post in post_list %}
+        <div class="col-md-4">
+            <div class="card mb-4 border-0 bg-body-secondary">
+                <div class="card-body">
+                    <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
+                        <div class="image-container">
+                            <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                        </div>
+                        <h2 class="card-title">{{ post.title | truncatechars:30 }}</h2>
+                    </a>
+                    <hr>
+                    <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

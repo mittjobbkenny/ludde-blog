@@ -1,7 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Hem</h1>
-<a href="{% url 'blog' %}">Besök Bloggen</a>
+<div class="container-fluid px-0">
+    <div id="carousel" class="carousel slide border-bottom" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true"
+                aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                {% for post in post_list|slice:'0:1' %}
+                <img src="{{ post.featured_image.url }}" class="d-block w-100" alt="img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ post.title | truncatechars:30 }}</h5>
+                    <p>{{ post.author }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="carousel-item">
+                {% for post in post_list|slice:'1:2' %}
+                <img src="{{ post.featured_image.url }}" class="d-block w-100" alt="img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ post.title | truncatechars:30 }}</h5>
+                    <p>{{ post.author }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="carousel-item">
+                {% for post in post_list|slice:'2:3' %}
+                <img src="{{ post.featured_image.url }}" class="d-block w-100" alt="img">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ post.title | truncatechars:30 }}</h5>
+                    <p>{{ post.author }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mt-4">
+        {% for post in post_list %}
+        <div class="col-md-4">
+            <div class="card mb-4 border-0 bg-body-secondary">
+                <div class="card-body">
+                    <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
+                        <div class="image-container">
+                            <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                        </div>
+                        <h2 class="card-title">{{ post.title | truncatechars:30 }}</h2>
+                    </a>
+                    <hr>
+                    <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

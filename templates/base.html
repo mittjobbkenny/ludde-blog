@@ -19,7 +19,7 @@
     <title>Ludde Blog</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <nav class="navbar fixed-top navbar-expand-lg bg-white border-bottom d-none d-lg-flex">
         <div class="container">
@@ -56,17 +56,12 @@
 
     {% include 'includes/mobile-nav.html' %}
 
-
-
-
-
-
-
     <main>
-        {% block content %}
-        {% endblock content %}
+    {% block content %}
+    {% endblock content %}
     </main>
 
+    <footer class="mt-auto bg-dark"></footer>
 
 </body>
 

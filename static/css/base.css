@@ -1,4 +1,19 @@
 body {
-    padding: 30px;
-    padding-top: 100px;
+    padding-top: 57px;
 }
+
+
+#carousel .carousel-item img {  
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    height:50vh;
+}
+
+footer {
+    height: 100px;
+}
+
+
+
+

@@ -1,25 +1,58 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<p>{{ post.title }}</p>
-<p>{{ post.created_on }}</p>
-<img src=" {{ post.featured_image.url }}" alt="img" style="height: 100xp; width: 100px;">
-<p>{{ post.content }}</p>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card mb-4 border-0 bg-body-secondary">
+                <div class="card-body">
+                    <div class="image-container">
+                        <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 my-auto">
+            <div class="card-body text-center">
+                <h2 class="card-title">{{ post.title }}</h2>
+                <p class="card-text text-muted h6">{{ post.created_on }}</p>
+            </div>
+            <p class="card-text">
+                {{ post.content | safe }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="card-text">
+                {{ post.content | safe }}
+            </p>
+        </div>
+    </div>
+</div>
 
-<hr>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
 
-{% for comment in comments %}
+        </div>
+        <div class="col-md-8">
+            {% for comment in comments %}
+            <p>{{ comment.author }}</p>
+            <p>{{ comment.body }}</p>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-<p>{{ comment.author }}</p>
-<p>{{ comment.body }}</p>
-<hr>
-{% endfor %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ comment_form }}
-    <br>
-    <button type="submit" class="btn btn-dark">Lägg till</button>
-</form>
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form }}
+        <br>
+        <button type="submit" class="btn btn-dark">Lägg till</button>
+    </form>
+</div>
 
 {% endblock %}
