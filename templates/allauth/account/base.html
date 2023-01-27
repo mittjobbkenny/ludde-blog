@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card mb-4 border-0 bg-body-secondary">
+        <div class="card-body">
+          {% block inner_content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
