@@ -53,7 +53,7 @@
     <div class="row mt-4">
         {% for post in post_list %}
         <div class="col-md-4">
-            <div class="card mb-4 border-0 bg-body-secondary">
+            <div class="card mb-4 border-0 bg-body-secondary bg-opacity-75">
                 <div class="card-body">
                     <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
                         <div class="image-container">
