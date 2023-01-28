@@ -44,9 +44,11 @@
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'post_add' %}">Ny post</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'account_logout' %}">Logga ut</a>
                     </li>

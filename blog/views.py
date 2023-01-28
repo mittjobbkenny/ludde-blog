@@ -66,7 +66,7 @@ class PostLike(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('post_detail', args=[slug, pk]))
 
 
-class PostAdd(LoginRequiredMixin, generic.CreateView):
+class PostAdd(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     model = Post
     template_name = 'blog/post_add.html'
@@ -75,3 +75,6 @@ class PostAdd(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.is_superuser
