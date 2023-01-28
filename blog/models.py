@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
+from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 
@@ -25,7 +26,7 @@ class Post(models.Model):
         return self.likes.count()
 
     def get_absolute_url(self):
-        return f'/{self.slug}/{self.pk}/'
+        return reverse('post_detail', kwargs={'slug': self.slug, 'pk': self.pk})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

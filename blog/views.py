@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, reverse
+from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import Post
-from .forms import CommentForm
+from .forms import PostForm, CommentForm
 
 
 class PostList(generic.ListView):
@@ -63,3 +64,14 @@ class PostLike(LoginRequiredMixin, View):
             post.likes.add(request.user)
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug, pk]))
+
+
+class PostAdd(LoginRequiredMixin, generic.CreateView):
+
+    model = Post
+    template_name = 'blog/post_add.html'
+    form_class = PostForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
