@@ -64,15 +64,13 @@
                 <p>{{ comment.body | linebreaks }}</p>
             </div>
             {% endif %}
-                
-
             {% endfor %}
         </div>
     </div>
 </div>
 
 <div class="container">
-    <form method="POST" novalidate id="firstName">
+    <form method="POST" novalidate>
         {% csrf_token %}
         {{ comment_form | crispy }}
         <br>

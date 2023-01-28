@@ -7,11 +7,10 @@
         <div class="col">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         {{ form | crispy }}
                         <br>
-                        <a href="{{ request.META.HTTP_REFERER }}" class="btn">Gå tillbaka</a>
                         <button type="submit" class="btn btn-dark">Lägg till</button>
                     </form>
                 </div>
