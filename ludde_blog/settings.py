@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'cloudinary',
     'crispy_forms',
+    'django_summernote',
     'home',
     'blog',
 ]
@@ -64,6 +65,27 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ludde_blog.urls'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+SUMMERNOTE_CONFIG = {
+    'lang': 'sv-SE',
+    'width': '100%',
+    'attachment_filesize_limit': 1024*1024*5,
+    'css': (
+        '/static/css/summernote-bs4.min.css',
+    ),
+    'toolbar': [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture']],
+        ['view', ['fullscreen']],
+    ],
+}
+
+SUMMERNOTE_THEME = 'bs4'
 
 TEMPLATES = [
     {
