@@ -928,3 +928,48 @@ html .note-fullscreen-body {
     font-size: 13px;
     padding: .28rem .65rem
 }
+
+.note-editable {
+    background-color: #FAFAFB !important;
+    border-radius: 5px !important;
+}
+
+.note-toolbar {
+    background-color: white;
+    border: none !important;
+}
+
+.note-resizebar {
+    display: none;
+}
+
+.card {
+    border: none !important;
+}
+
+.note-recent-color {
+    background-color: #DEE2E6 !important;
+}
+
+.note-editable {
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 5px;
+}
+
+.note-editor > * {
+    border: none !important;
+}
+
+.note-image-btn {
+    background-color: #212529 !important;
+    border: none !important;
+}
+
+.show {
+    background-color: transparent !important;
+}
+
+.note-input {
+    background-color: #FAFAFB !important;
+    border-radius: 5px !important;
+}

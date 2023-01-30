@@ -1,81 +1,86 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card mb-4 border-0 bg-body-secondary bg-opacity-75">
-                <div class="card-body">
-                    <div class="image-container">
-                        <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+<div class="container mb-4">
+    <div class="card mt-4 border-0 bg-body-secondary bg-opacity-75 rounded-bottom-0">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="image-container p-3">
+                    <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                </div>
+            </div>
+            <div class="col-md-8 my-auto">
+                <div class="card-body text-center">
+                    <h2 class="card-title text-capitalize"><u>{{ post.title | truncatechars:30 }}</u></h2>
+                    <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card border rounded-top-0">
+        <div class="row">
+            <div class="col">
+                <div class="card-body p-3">
+                    {{ post.content | safe }}
+                </div>
+            </div>
+            <div class="row m-0 p-0">
+                <div class="col">
+                    <div class="d-flex align-items-center border-top bg-body-secondary bg-opacity-75">
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
+                            {% csrf_token %}
+                            {% if liked %}
+                            <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn"
+                                aria-label="like">
+                                {{ post.number_of_likes }}
+                                <i class="fa-solid fa-thumbs-up"></i> Gilla</button>
+                            {% else %}
+                            <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn"
+                                aria-label="like">
+                                {{ post.number_of_likes }}
+                                <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
+                            {% endif %}
+                        </form>
+                        {% else %}
+                        <span class="text-secondary">{{ post.number_of_likes }} <i
+                                class="fa-regular fa-thumbs-up"></i></span>
+                        {% endif %}
+                        {% with comments.count as total_comments %}
+                        <button class="btn" aria-label="comment">{{ total_comments }} <i
+                                class="fa-solid fa-comments"></i>
+                            Kommentera</button>
+                        {% endwith %}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8 my-auto">
-            <div class="card-body text-center">
-                <h2 class="card-title">{{ post.title }}</h2>
-                <p class="card-text text-muted h6">{{ post.created_on }}</p>
-            </div>
-            <p class="card-text">
-                {{ post.content | safe }}
-            </p>
-        </div>
     </div>
-</div>
 
-<div class="container">
     <div class="row">
-        <div class="col-md-4">
-            <div class="d-flex align-items-center">
-                {% if user.is_authenticated %}
-                <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
-                    {% csrf_token %}
-                    {% if liked %}
-                    <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn" aria-label="like">
-                        {{ post.number_of_likes }}
-                        <i class="fa-solid fa-thumbs-up"></i> Gilla</button>
-                    {% else %}
-                    <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn" aria-label="like">
-                        {{ post.number_of_likes }}
-                        <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
-                    {% endif %}
-                </form>
-                {% else %}
-                <span class="text-secondary">{{ post.number_of_likes }} <i class="fa-regular fa-thumbs-up"></i></span>
-                {% endif %}
-                {% with comments.count as total_comments %}
-                <button class="btn" aria-label="comment">{{ total_comments }} <i class="fa-solid fa-comments"></i>
-                    Kommentera</button>
-                {% endwith %}
-            </div>
-
+        <div class="col-md-4 p-3">
+            <p class="h5"><u>Kommentarer:</u></p>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 p-3">
             {% for comment in comments %}
-            {% if forloop.counter|divisibleby:2 %}
-            <div class="bg-body-secondary bg-opacity-50 rounded p-2">
-                <p>{{ comment.author }}</p>
+            <div class="border-bottom mb-3">
+                <p class="text-capitalize h6"><u>{{ comment.author }}:</u></p>
                 <p>{{ comment.body | linebreaks }}</p>
             </div>
-            {% else %}
-            <div class="p-2">
-                <p>{{ comment.author }}</p>
-                <p>{{ comment.body | linebreaks }}</p>
-            </div>
-            {% endif %}
             {% endfor %}
         </div>
     </div>
-</div>
 
-<div class="container">
-    <form method="POST" novalidate>
-        {% csrf_token %}
-        {{ comment_form | crispy }}
-        <br>
-        <button type="submit" class="btn btn-dark">Lägg till</button>
-    </form>
+    <div class="row mt-3">
+        <div class="col">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                {{ comment_form | crispy }}
+                <br>
+                <button type="submit" class="btn btn-dark">Lägg till</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

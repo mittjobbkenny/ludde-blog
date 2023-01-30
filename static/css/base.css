@@ -14,6 +14,12 @@ footer {
     height: 100px;
 }
 
+textarea, input {
+    background-color: #FAFAFB !important;
+    border-radius: 5px !important;
+}
 
-
-
+img {
+    max-width: 100% !important;
+    border-radius: 5px !important;
+}
