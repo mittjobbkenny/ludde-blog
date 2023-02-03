@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{{ form.media }}
+
 <div class="container">
     <div class="row mt-4">
         <div class="col">
@@ -9,7 +11,7 @@
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
-                        {{ form | crispy }}
+                        {{ form | crispy | safe }}
                         <br>
                         <button type="submit" class="btn btn-dark">Lägg till</button>
                     </form>
@@ -18,5 +20,39 @@
         </div>
     </div>
 </div>
+
+<!-- Summernote -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-sv-SE.min.js"
+    integrity="sha512-tLdTOnY7hwU+YiYQnx7TWDyRQTfucM4Y0x+ePIBvRVOYZfoBwZZOd1o6BKRM2WMwwC8XgzyLNXOL0g4eR+G/0Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $('.summernoteinplacewidget').summernote({
+        lang: 'sv-SE',
+        height: '50vh',
+        disableDragAndDrop: true,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['fullscreen']],
+        ],
+        styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+        colorButton: {
+            foreColor: '#FFFFFF',
+            backColor: '#DD3545',
+        },
+        placeholder: 'Innehåll...',
+    });
+</script>
+
+<style>
+    img {
+        width: 300px;
+    }
+</style>
 
 {% endblock %}

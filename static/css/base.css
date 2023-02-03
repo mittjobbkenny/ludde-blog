@@ -23,7 +23,22 @@ textarea, input {
     border-radius: 5px !important;
 }
 
-img {
+.card img {
     max-width: 100% !important;
     border-radius: 5px !important;
+}
+
+.card-img-top {
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    max-height: 400px !important;
+}
+
+.asteriskField {
+    display: none;
+}
+
+#div_id_featured_image {
+    margin-block: 15px;
 }

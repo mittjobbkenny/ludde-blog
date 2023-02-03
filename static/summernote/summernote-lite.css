@@ -1,0 +1,73 @@
+.note-editor {
+    border: none !important;
+} 
+
+.note-editable {
+    background-color: #F3F6F7 !important;
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 5px !important;
+}
+
+.note-toolbar {
+    background-color: white;
+    border: none !important;
+    padding-left: 0 !important;
+}
+
+.note-resizebar {
+    background-color: white;
+}
+
+.note-editor > * {
+    border: none !important;
+}
+
+.note-btn-primary {
+    background-color: #212529 !important;
+    border: none !important;
+}
+
+.note-form-label {
+    color: #424649 !important;
+}
+
+.note-modal-title {
+    color: #424649 !important;
+}
+
+.show {
+    background-color: transparent !important;
+}
+
+.note-input {
+    background-color: #FAFAFB !important;
+    border-radius: 5px !important;
+}
+
+.note-recent-color {
+    border-radius: 50% !important;
+}
+
+.note-editor .dropdown-toggle::after {
+    all: unset;
+}
+
+.note-editor .note-dropdown-menu, .note-editor .note-modal-footer {
+    box-sizing: content-box;
+}
+
+.note-modal {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    min-width: 400px !important;
+}
+
+.sn-checkbox-open-in-new-window input {
+    margin-right: 10px !important;
+}
+
+.sn-checkbox-use-protocol input {
+    margin-right: 10px !important;
+}

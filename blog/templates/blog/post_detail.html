@@ -63,9 +63,9 @@
         </div>
         <div class="col-md-8 p-3">
             {% for comment in comments %}
-            <div class="border-bottom mb-3">
+            <div class="mb-3 p-2 bg-body-secondary bg-opacity-50 rounded">
                 <p class="text-capitalize h6"><u>{{ comment.author }}:</u></p>
-                <p>{{ comment.body | linebreaks }}</p>
+                <p>{{ comment.body | safe | linebreaks }}</p>
             </div>
             {% endfor %}
         </div>
@@ -82,5 +82,31 @@
         </div>
     </div>
 </div>
+
+<!-- Summernote -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-sv-SE.min.js"
+    integrity="sha512-tLdTOnY7hwU+YiYQnx7TWDyRQTfucM4Y0x+ePIBvRVOYZfoBwZZOd1o6BKRM2WMwwC8XgzyLNXOL0g4eR+G/0Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $('.summernoteinplacewidget').summernote({
+        lang: 'sv-SE',
+        height: '200px',
+        disableDragAndDrop: true,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+        ],
+        styleTags: ['p', 'h3'],
+        colorButton: {
+            foreColor: '#FFFFFF',
+            backColor: '#DD3545',
+        },
+        placeholder: 'Kommentar...',
+    });
+    $("p").children("img").attr('alt', 'upload-img');
+</script>
 
 {% endblock %}
