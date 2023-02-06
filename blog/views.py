@@ -24,6 +24,9 @@ class PostDetail(View):
         liked = False
         if post.likes.filter(id=self.request.user.id).exists():
             liked = True
+        commented = False
+        if comments.filter(author=self.request.user).exists():
+            commented = True
 
         return render(
             request,
@@ -31,7 +34,7 @@ class PostDetail(View):
             {
                 'post': post,
                 'comments': comments,
-                'commented': False,
+                'commented': commented,
                 'liked': liked,
                 'comment_form': CommentForm()
             },

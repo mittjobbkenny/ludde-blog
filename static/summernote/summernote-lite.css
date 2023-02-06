@@ -3,8 +3,8 @@
 } 
 
 .note-editable {
-    background-color: #F3F6F7 !important;
-    border: 1px solid #DEE2E6 !important;
+    background-color: #E9ECEF !important;
+    border: none !important;
     border-radius: 5px !important;
 }
 
@@ -44,10 +44,6 @@
     border-radius: 5px !important;
 }
 
-.note-recent-color {
-    border-radius: 50% !important;
-}
-
 .note-editor .dropdown-toggle::after {
     all: unset;
 }
@@ -62,6 +58,10 @@
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
     min-width: 400px !important;
+}
+
+.note-placeholder {
+    color: #53575B;
 }
 
 .sn-checkbox-open-in-new-window input {

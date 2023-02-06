@@ -1,84 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container mb-4">
-    <div class="card mt-4 border-0 bg-body-secondary bg-opacity-50 rounded-bottom-0">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="image-container p-3">
-                    <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
-                </div>
-            </div>
-            <div class="col-md-8 my-auto">
-                <div class="card-body text-center">
-                    <h2 class="card-title text-capitalize"><u>{{ post.title | truncatechars:30 }}</u></h2>
-                    <p class="card-text text-muted h6">{{ post.created_on }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="card border">
-        <div class="row">
-            <div class="col">
-                <div class="card-body p-3">
-                    {{ post.content | safe }}
-                </div>
-            </div>
-            <div class="row m-0 p-0">
-                <div class="col">
-                    <div class="d-flex align-items-center border-top bg-body-secondary bg-opacity-50">
-                        {% if user.is_authenticated %}
-                        <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
-                            {% csrf_token %}
-                            {% if liked %}
-                            <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn"
-                                aria-label="like">
-                                {{ post.number_of_likes }}
-                                <i class="fa-solid fa-thumbs-up"></i> Gilla</button>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col mb-4">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="image-container">
+                        <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                    </div>
+                    <h2 class="card-title mt-2 text-capitalize"><u>{{ post.title | truncatechars:30 }}</u></h2>
+                    <p class="card-text">{{ post.content | safe }}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                        <div class="d-flex align-items-center">
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
+                                {% csrf_token %}
+                                {% if liked %}
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn text-muted"
+                                    aria-label="like">
+                                    {{ post.number_of_likes }}
+                                    <i class="fa-solid fa-thumbs-up"></i> Gilla</button>
+                                {% else %}
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn text-muted"
+                                    aria-label="like">
+                                    {{ post.number_of_likes }}
+                                    <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
+                                {% endif %}
+                            </form>
                             {% else %}
-                            <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn"
-                                aria-label="like">
-                                {{ post.number_of_likes }}
-                                <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
+                            <span class="text-secondary text-muted">{{ post.number_of_likes }} <i
+                                    class="fa-regular fa-thumbs-up"></i></span>
                             {% endif %}
-                        </form>
-                        {% else %}
-                        <span class="text-secondary">{{ post.number_of_likes }} <i
-                                class="fa-regular fa-thumbs-up"></i></span>
-                        {% endif %}
-                        {% with comments.count as total_comments %}
-                        <button class="btn" aria-label="comment">{{ total_comments }} <i
-                                class="fa-solid fa-comments"></i>
-                            Kommentera</button>
-                        {% endwith %}
+                            &#8739;
+                            {% with comments.count as total_comments %}
+                            <button id="commentBtn" class="btn text-muted" aria-label="comment">{{ total_comments }}
+                                {% if commented %}<i class="fa-solid fa-comments"></i>{% else %}<i
+                                    class="fa-regular fa-comments"></i>{% endif %}
+                                Kommentera</button>
+                            {% endwith %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-4 p-3">
-            <p class="h5"><u>Kommentarer:</u></p>
-        </div>
-        <div class="col-md-8 p-3">
-            {% for comment in comments %}
-            <div class="mb-3 p-2 bg-body-secondary bg-opacity-50 rounded">
-                <p class="text-capitalize h6"><u>{{ comment.author }}:</u></p>
-                <p>{{ comment.body | safe | linebreaks }}</p>
+        <div class="row">
+            <div class="col-md-4">
+                <p class="h5 ps-3"><u>
+                        Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
+                </p>
             </div>
-            {% endfor %}
+            <div class="col-md-8 mt-1">
+                <ol class="ps-3" reversed style="list-style-position:inside;">
+                    {% for comment in comments %}
+                    {% if forloop.first %}
+                    <hr class="text-muted">
+                    {% endif %}
+                    <li>
+                        <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted h7">
+                                {{ comment.created_on }}</small></span>
+                        <p>{{ comment.body | safe | linebreaks }}</p>
+                    </li>
+                    <hr class="text-muted">
+                    {% empty %}
+                    <hr class="text-muted">
+                    <div>
+                        0. <span class="h6"><u> Kommentarer</u> <small class="text-muted h7">
+                                sedan {{ post.created_on }}</small></span>
+                    </div>
+                    <hr class="text-muted">
+                    {% endfor %}
+                </ol>
+            </div>
         </div>
-    </div>
 
-    <div class="row mt-3">
-        <div class="col">
-            <form method="POST" novalidate>
-                {% csrf_token %}
-                {{ comment_form | crispy }}
-                <br>
-                <button type="submit" class="btn btn-dark">Lägg till</button>
-            </form>
+        <div class="row">
+            <div class="col mb-4">
+                <form method="POST" novalidate class="ps-3" id="myText">
+                    {% csrf_token %}
+                    {{ comment_form | crispy }}
+                    <br>
+                    <button type="submit" class="btn btn-dark">Lägg till</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -93,20 +100,16 @@
         height: '200px',
         disableDragAndDrop: true,
         toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
+            ['font', ['bold', 'underline']],
         ],
-        styleTags: ['p', 'h3'],
-        colorButton: {
-            foreColor: '#FFFFFF',
-            backColor: '#DD3545',
-        },
         placeholder: 'Kommentar...',
     });
+
     $("p").children("img").attr('alt', 'upload-img');
+
+    $("#commentBtn").click(function () {
+        $('.note-editable').focus();
+    });
 </script>
 
 {% endblock %}
