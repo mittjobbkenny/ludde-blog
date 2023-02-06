@@ -55,10 +55,8 @@
             </div>
             <div class="col-md-8 mt-1">
                 <ol class="ps-3" reversed style="list-style-position:inside;">
-                    {% for comment in comments %}
-                    {% if forloop.first %}
                     <hr class="text-muted">
-                    {% endif %}
+                    {% for comment in comments %}
                     <li>
                         <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted h7">
                                 {{ comment.created_on }}</small></span>
@@ -66,7 +64,6 @@
                     </li>
                     <hr class="text-muted">
                     {% empty %}
-                    <hr class="text-muted">
                     <div>
                         0. <span class="h6"><u> Kommentarer</u> <small class="text-muted h7">
                                 sedan {{ post.created_on }}</small></span>
