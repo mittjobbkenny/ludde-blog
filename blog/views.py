@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404, reverse
-from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
 
@@ -25,8 +24,9 @@ class PostDetail(View):
         if post.likes.filter(id=self.request.user.id).exists():
             liked = True
         commented = False
-        if comments.filter(author=self.request.user).exists():
-            commented = True
+        if request.user.is_authenticated:
+            if comments.filter(author=self.request.user).exists():
+                commented = True
 
         return render(
             request,
@@ -82,3 +82,20 @@ class PostAdd(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     def test_func(self):
         return self.request.user.is_superuser
+
+
+class CommentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+
+    model = Comment
+    template_name = 'blog/post_detail.html'
+
+    def get_success_url(self):
+        post = Post.objects.get(pk=self.object.post.pk)
+        messages.info(self.request, 'Kommentar borttagen')
+        return post.get_absolute_url()
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False

@@ -20,19 +20,21 @@
                 <div class="ps-3">
                     <hr>
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                        <div>
+                            <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                        </div>
                         <div class="d-flex align-items-center">
                             {% if user.is_authenticated %}
                             <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
                                 {% csrf_token %}
                                 {% if liked %}
-                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn text-muted"
-                                    aria-label="like">
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}"
+                                    class="btn btn-outline-dark" aria-label="like">
                                     {{ post.number_of_likes }}
                                     <i class="fa-solid fa-thumbs-up"></i> Gilla</button>
                                 {% else %}
-                                <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn text-muted"
-                                    aria-label="like">
+                                <button type="submit" name="blogpost_id" value="{{ post.slug }}"
+                                    class="btn btn-outline-dark" aria-label="like">
                                     {{ post.number_of_likes }}
                                     <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
                                 {% endif %}
@@ -41,12 +43,21 @@
                             <span class="text-secondary text-muted">{{ post.number_of_likes }} <i
                                     class="fa-regular fa-thumbs-up"></i></span>
                             {% endif %}
-                            &#8739;
+                            <span class="mx-2">&#8739;</span>
                             {% with comments.count as total_comments %}
-                            <button id="commentBtn" class="btn text-muted" aria-label="comment">{{ total_comments }}
-                                {% if commented %}<i class="fa-solid fa-comments"></i>{% else %}<i
-                                    class="fa-regular fa-comments"></i>{% endif %}
+                            {% if user.is_authenticated %}
+                            <button id="commentBtn" class="btn btn-outline-dark" aria-label="comment">
+                                {{ total_comments }}
+                                {% if commented %}
+                                <i class="fa-solid fa-comments"></i>
+                                {% else %}
+                                <i class="fa-regular fa-comments"></i>
+                                {% endif %}
                                 Kommentera</button>
+                            {% else %}
+                            <span class="text-secondary text-muted">{{ total_comments }} <i
+                                    class="fa-regular fa-comments"></i></span>
+                            {% endif %}
                             {% endwith %}
                         </div>
                     </div>
@@ -55,7 +66,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mt-4">
                 <p class="h5 ps-3"><u>
                         Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
                 </p>
@@ -65,14 +76,14 @@
                     <hr class="text-muted">
                     {% for comment in comments %}
                     <li>
-                        <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted h7">
+                        <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
                                 {{ comment.created_on }}</small></span>
                         <p>{{ comment.body | safe | linebreaks }}</p>
                     </li>
                     <hr class="text-muted">
                     {% empty %}
                     <div>
-                        0. <span class="h6"><u> Kommentarer</u> <small class="text-muted h7">
+                        0. <span class="h6"><u> Kommentarer</u> <small class="text-muted">
                                 sedan {{ post.created_on }}</small></span>
                     </div>
                     <hr class="text-muted">
