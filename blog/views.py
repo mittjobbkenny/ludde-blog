@@ -64,8 +64,10 @@ class PostLike(LoginRequiredMixin, View):
         post = get_object_or_404(Post, slug=slug, pk=pk)
         if post.likes.filter(id=request.user.id).exists():
             post.likes.remove(request.user)
+            messages.info(self.request, 'Gilla borttagen')
         else:
             post.likes.add(request.user)
+            messages.info(self.request, 'Gillar detta inlägg')
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug, pk]))
 

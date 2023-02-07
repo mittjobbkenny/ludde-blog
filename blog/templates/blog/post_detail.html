@@ -19,8 +19,8 @@
             <div class="col">
                 <div class="ps-3">
                     <hr>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                    <div class="d-block d-md-flex justify-content-between align-items-center">
+                        <div class="mb-4">
                             <p class="card-text text-muted h6">{{ post.created_on }}</p>
                         </div>
                         <div class="d-flex align-items-center">
@@ -67,7 +67,7 @@
 
         <div class="row">
             <div class="col-md-4 mt-4">
-                <p class="h5 ps-3"><u>
+                <p class="h5 ps-3" style="margin-top: 10px;"><u>
                         Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
                 </p>
             </div>
