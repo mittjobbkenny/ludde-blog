@@ -67,7 +67,7 @@ class PostLike(LoginRequiredMixin, View):
             messages.info(self.request, 'Gilla borttagen')
         else:
             post.likes.add(request.user)
-            messages.info(self.request, 'Gillar detta inlägg')
+            messages.info(self.request, 'Gilla tillagd')
 
         return HttpResponseRedirect(reverse('post_detail', args=[slug, pk]))
 
