@@ -37,3 +37,21 @@ textarea, input {
 #div_id_featured_image {
     margin-block: 15px;
 }
+
+.note-float-left {
+    margin-right: 10px;
+}
+
+.note-float-right {
+    margin-left: 10px;
+}
+
+.note-float-left img,
+.note-float-right img {
+    max-width: 100% !important;
+    border-radius: 5px !important;
+}
+
+.progress-bar {
+    transition: 0s all !important;
+}

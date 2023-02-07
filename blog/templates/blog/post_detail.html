@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row mt-4">
-        <div class="col mb-4">
+        <div class="col">
             <div class="card border-0">
                 <div class="card-body">
                     <div class="image-container">
@@ -11,6 +11,13 @@
                     </div>
                     <h2 class="card-title mt-2 text-capitalize"><u>{{ post.title | truncatechars:30 }}</u></h2>
                     <p class="card-text">{{ post.content | safe }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="ps-3">
                     <hr>
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="card-text text-muted h6">{{ post.created_on }}</p>
@@ -97,7 +104,7 @@
         height: '200px',
         disableDragAndDrop: true,
         toolbar: [
-            ['font', ['bold', 'underline']],
+            ['font', ['bold', 'italic', 'underline']],
         ],
         placeholder: 'Kommentar...',
     });
