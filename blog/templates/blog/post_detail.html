@@ -78,6 +78,47 @@
                     <li>
                         <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
                                 {{ comment.created_on }}</small></span>
+
+                        {% if request.user == comment.author %}
+                        <button type="button" class="btn text-dark border badge" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
+                                class="fa-solid fa-edit"></i></button>
+
+                        <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
+                                type="button" class="btn text-dark border badge" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-title="Radera kommentar"><i
+                                    class="fa-solid fa-x"></i></button></span>
+
+                        <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
+                            aria-labelledby="commentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="commentModalLabel"><i
+                                                class="fa-solid fa-circle-exclamation"></i> Radera kommentar</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="text-capitalize h6 "><u>{{ comment.author }}</u> <small
+                                                class="text-muted">
+                                                {{ comment.created_on }}</small></span>
+                                        <p>{{ comment.body | safe | linebreaks | truncatechars:100 }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{% url 'comment_delete' post.slug comment.pk %}" method="POST"
+                                            class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-dark btn-sm">Radera</button>
+                                        </form>
+                                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                            data-bs-dismiss="modal">Avbryt</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
                         <p>{{ comment.body | safe | linebreaks }}</p>
                     </li>
                     <hr class="text-muted">
@@ -118,6 +159,13 @@
             ['font', ['bold', 'italic', 'underline']],
         ],
         placeholder: 'Kommentar...',
+        callbacks: {
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        }
     });
 
     $("p").children("img").attr('alt', 'upload-img');
@@ -125,6 +173,11 @@
     $("#commentBtn").click(function () {
         $('.note-editable').focus();
     });
+
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+
 </script>
 
 {% endblock %}
