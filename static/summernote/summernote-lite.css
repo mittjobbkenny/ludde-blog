@@ -80,3 +80,7 @@
 .note-tooltip-content {
     border-radius: 5px !important;
 }
+
+.note-editor.note-frame .note-editing-area {
+	overflow: visible !important;
+}

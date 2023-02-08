@@ -170,6 +170,8 @@
 
     $("p").children("img").attr('alt', 'upload-img');
 
+    $(".note-editable").addClass('form-control');
+
     $("#commentBtn").click(function () {
         $('.note-editable').focus();
     });
@@ -177,7 +179,6 @@
     $(function () {
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
-
 </script>
 
 {% endblock %}
