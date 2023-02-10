@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.edit import FormMixin
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
@@ -13,54 +14,46 @@ class PostList(generic.ListView):
     queryset = Post.objects.order_by('-created_on')
     template_name = 'blog/blog.html'
 
-class PostDetail(View):
 
-    def get(self, request, slug, pk, *args, **kwargs):
+class PostDetail(FormMixin, generic.DetailView):
 
-        queryset = Post.objects.all()
-        post = get_object_or_404(queryset,slug=slug, pk=pk)
-        comments = post.comments.order_by('-created_on')
-        liked = False
-        if post.likes.filter(id=self.request.user.id).exists():
-            liked = True
-        commented = False
-        if request.user.is_authenticated:
-            if comments.filter(author=self.request.user).exists():
-                commented = True
+    model = Post
+    template_name = 'blog/post_detail.html'
+    form_class = CommentForm
 
-        return render(
-            request,
-            'blog/post_detail.html',
-            {
-                'post': post,
-                'comments': comments,
-                'commented': commented,
-                'liked': liked,
-                'comment_form': CommentForm()
-            },
-        )
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'slug': self.object.slug, 'pk': self.object.pk})
 
-    def post(self, request, slug, pk, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data(**kwargs)
+        context['comments'] = self.object.comments.order_by('-created_on')
+        context['liked'] = self.object.likes.filter(id=self.request.user.id).exists()
+        context['commented'] = self.object.comments.filter(author=self.request.user.id).exists()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
 
         if request.user.is_authenticated:
-            queryset = Post.objects.all()
-            post = get_object_or_404(queryset, slug=slug, pk=pk)
-            comment_form = CommentForm(data=request.POST)
-
-            if comment_form.is_valid():
-                comment = comment_form.save(commit=False)
-                comment.post = post
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.post = self.object
                 comment.author = request.user
-                comment.save()
-                messages.info(request, 'Kommentar tillagd')
+                return self.form_valid(form)
+            else:
+                messages.info(self.request, 'Ingen kommentar')
+                return self.form_invalid(form)
 
-        return HttpResponseRedirect(reverse('post_detail', args=[slug, pk]))
+    def form_valid(self, form):
+        form.save()
+        messages.info(self.request, 'Kommentar tillagd')
+        return super(PostDetail, self).form_valid(form)
 
 
 class PostLike(LoginRequiredMixin, View):
   
     def post(self, request, slug, pk, *args, **kwargs):
-
         post = get_object_or_404(Post, slug=slug, pk=pk)
         if post.likes.filter(id=request.user.id).exists():
             post.likes.remove(request.user)

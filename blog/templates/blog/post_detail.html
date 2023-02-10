@@ -137,7 +137,7 @@
             <div class="col mb-4">
                 <form method="POST" enctype="multipart/form-data" novalidate class="ps-3">
                     {% csrf_token %}
-                    {{ comment_form | crispy }}
+                    {{ form | crispy }}
                     <br>
                     <button type="submit" class="btn btn-dark">Lägg till</button>
                 </form>
