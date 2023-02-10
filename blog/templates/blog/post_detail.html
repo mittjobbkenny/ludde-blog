@@ -135,7 +135,7 @@
 
         <div class="row">
             <div class="col mb-4">
-                <form method="POST" novalidate class="ps-3" id="myText">
+                <form method="POST" enctype="multipart/form-data" novalidate class="ps-3">
                     {% csrf_token %}
                     {{ comment_form | crispy }}
                     <br>
