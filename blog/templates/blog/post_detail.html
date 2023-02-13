@@ -29,12 +29,14 @@
                                 {% csrf_token %}
                                 {% if liked %}
                                 <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                                    class="btn btn-outline-dark btn-sm" aria-label="like">
+                                    class="note-btn rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Ta bort gilla">
                                     {{ post.number_of_likes }}
-                                    <i class="fa-solid fa-thumbs-up fa-lg"></i> Gilla</button>
+                                    <i class="fa-solid fa-thumbs-up"></i></button>
                                 {% else %}
                                 <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                                    class="btn btn-outline-dark btn-sm" aria-label="like">
+                                    class="note-btn rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Lägg till gilla">
                                     {{ post.number_of_likes }}
                                     <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
                                 {% endif %}
@@ -43,17 +45,18 @@
                             <span class="text-secondary text-muted">{{ post.number_of_likes }} <i
                                     class="fa-regular fa-thumbs-up"></i></span>
                             {% endif %}
-                            <span class="mx-2">&#8739;</span>
                             {% with comments.count as total_comments %}
                             {% if user.is_authenticated %}
-                            <button id="commentBtn" class="btn btn-outline-dark btn-sm" aria-label="comment">
-                                {{ total_comments }}
-                                {% if commented %}
-                                <i class="fa-solid fa-comments fa-lg"></i>
-                                {% else %}
-                                <i class="fa-regular fa-comments"></i>
-                                {% endif %}
+                            {% if commented %}
+                            <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
+                                {{ total_comments }} <i class="fa-solid fa-comments"></i></button>
+                            {% else %}
+                            <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
+                                {{ total_comments }} <i class="fa-regular fa-comments"></i>
                                 Kommentera</button>
+                            {% endif %}
                             {% else %}
                             <span class="text-secondary text-muted">{{ total_comments }} <i
                                     class="fa-regular fa-comments"></i></span>
@@ -80,13 +83,13 @@
                                 {{ comment.created_on }}</small></span>
 
                         {% if request.user == comment.author %}
-                        <button type="button" class="btn text-dark border badge" data-bs-toggle="tooltip"
+                        <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
                             data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
                                 class="fa-solid fa-edit"></i></button>
 
                         <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
-                                type="button" class="btn text-dark border badge" data-bs-toggle="tooltip"
-                                data-bs-placement="top" data-bs-title="Radera kommentar"><i
+                                type="button" class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
                                     class="fa-solid fa-x"></i></button></span>
 
                         <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
@@ -162,12 +165,12 @@
         ],
         placeholder: {% if user.is_authenticated %}'Kommentar...'{% else %}'Logga in för att kommentera.'{% endif %},
         callbacks: {
-            onPaste: function (e) {
-                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-                e.preventDefault();
-                document.execCommand('insertText', false, bufferText);
-            }
+        onPaste: function (e) {
+            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+            e.preventDefault();
+            document.execCommand('insertText', false, bufferText);
         }
+    }
     });
 
     $("p").children("img").attr('alt', 'upload-img');
@@ -183,9 +186,9 @@
     });
 
     {% if not user.is_authenticated %}
-    $(".note-editable").attr("contenteditable","false")
+    $(".note-editable").attr("contenteditable", "false")
     {% endif %}
-    
+
 </script>
 
 {% endblock %}
