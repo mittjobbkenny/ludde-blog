@@ -29,7 +29,7 @@
                                 {% csrf_token %}
                                 {% if liked %}
                                 <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                                    class="note-btn rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
+                                    class="note-btn active rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-title="Ta bort gilla">
                                     {{ post.number_of_likes }}
                                     <i class="fa-solid fa-thumbs-up"></i></button>
@@ -50,7 +50,7 @@
                             {% if commented %}
                             <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                                {{ total_comments }} <i class="fa-solid fa-comments"></i></button>
+                                {{ total_comments }} <i class="fa-solid fa-comments"></i> Kommentera</button>
                             {% else %}
                             <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">

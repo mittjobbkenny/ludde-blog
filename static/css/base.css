@@ -56,3 +56,11 @@ textarea, input {
 .progress-bar {
     transition: 0s all !important;
 }
+
+.note-btn:focus,
+.note-btn:hover,
+.note-btn:active,
+.note-btn.active {
+    background-color: #E9ECEF !important;
+    background: #E9ECEF !important;
+}
