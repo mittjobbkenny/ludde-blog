@@ -13,6 +13,7 @@ class PostList(generic.ListView):
     model = Post
     queryset = Post.objects.order_by('-created_on')
     template_name = 'blog/blog.html'
+    paginate_by = 6
 
 
 class PostDetail(FormMixin, generic.DetailView):
