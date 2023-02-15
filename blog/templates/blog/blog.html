@@ -31,24 +31,28 @@
 
     {% if is_paginated %}
     <nav aria-label="Page navigation">
-        <div class="pagination justify-content-center mb-4">
-            <div class="note-btn-group">
+        <div class="row mb-4">
+            <div class="col text-end p-0">
                 {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" class="note-btn"><i
-                        class="fa-solid fa-angle-left"></i></a>
+                <a href="?page={{ page_obj.previous_page_number }}"
+                    class="note-btn text-decoration-none border-end-0 rounded-end-0"><i
+                        class="fa-solid fa-angle-left"></i> Föregående</a>
                 {% else %}
-                <button class="note-btn disabled"><i class="fa-solid fa-angle-left"></i></button>
+                <button class="note-btn disabled border-end-0 rounded-end-0"><i class="fa-solid fa-angle-left"></i>
+                    Föregående</button>
                 {% endif %}
+            </div>
 
+            <div class="col-auto p-0">
                 <span class="dropup-center dropup">
-                    <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" data-bs-offset="0,25">
-                        Sida {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}
-                    </a>
+                    <a class="note-btn dropdown-toggle text-decoration-none rounded-0" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,25">Sida
+                        <strong>{{ page_obj.number }}</strong> av {{ page_obj.paginator.num_pages }}</a>
+
                     <ul class="dropdown-menu"
                         style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
                         {% for i in paginator.page_range %}
-                        <li><a class="dropdown-item note-btn border-0" href="?page={{ i }}">{{ i }} av
+                        <li><a class="dropdown-item note-btn border-0" href="?page={{ i }}"><strong>{{ i }}</strong> av
                                 {{ page_obj.paginator.num_pages }}</a></li>
                         {% if not forloop.last %}
                         <li class="border-bottom"></li>
@@ -56,12 +60,16 @@
                         {% endfor %}
                     </ul>
                 </span>
+            </div>
 
+            <div class="col p-0">
                 {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="note-btn"><i
+                <a href="?page={{ page_obj.next_page_number }}"
+                    class="note-btn text-decoration-none border-start-0 rounded-start-0">Nästa <i
                         class="fa-solid fa-angle-right"></i></a>
                 {% else %}
-                <button class="note-btn disabled"><i class="fa-solid fa-angle-right"></i></button>
+                <button class="note-btn disabled border-start-0 rounded-start-0">Nästa <i
+                        class="fa-solid fa-angle-right"></i></button>
                 {% endif %}
             </div>
         </div>

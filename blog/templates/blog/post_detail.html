@@ -31,13 +31,13 @@
                                 <button type="submit" name="blogpost_id" value="{{ post.slug }}"
                                     class="note-btn rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-title="Ta bort gilla">
-                                    {{ post.number_of_likes }}
+                                    <strong>{{ post.number_of_likes }}</strong>
                                     <i class="fa-solid fa-thumbs-up"></i></button>
                                 {% else %}
                                 <button type="submit" name="blogpost_id" value="{{ post.slug }}"
                                     class="note-btn rounded-end-0" aria-label="like" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-title="Lägg till gilla">
-                                    {{ post.number_of_likes }}
+                                    <strong>{{ post.number_of_likes }}</strong>
                                     <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
                                 {% endif %}
                             </form>
@@ -50,15 +50,15 @@
                             {% if commented %}
                             <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                                {{ total_comments }} <i class="fa-solid fa-comments"></i> Kommentera</button>
+                                <strong>{{ total_comments }}</strong> <i class="fa-solid fa-comments"></i></button>
                             {% else %}
                             <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                                {{ total_comments }} <i class="fa-regular fa-comments"></i>
+                                <strong>{{ total_comments }}</strong> <i class="fa-regular fa-comments"></i>
                                 Kommentera</button>
                             {% endif %}
                             {% else %}
-                            <span class="text-secondary text-muted">{{ total_comments }} <i
+                            <span class="text-secondary text-muted"><strong>{{ total_comments }}</strong> <i
                                     class="fa-regular fa-comments"></i></span>
                             {% endif %}
                             {% endwith %}
