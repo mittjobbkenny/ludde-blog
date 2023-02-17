@@ -32,6 +32,7 @@ class PostList(generic.ListView):
             context['sort_by'] = sort_by
         else:
             context['sort_by'] = 'desc'
+        context['num_posts'] = Post.objects.all().count()
         return context
 
 
