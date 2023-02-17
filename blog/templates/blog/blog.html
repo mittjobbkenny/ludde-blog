@@ -2,6 +2,23 @@
 {% block content %}
 
 <div class="container">
+
+    <div class="d-flex justify-content-between mt-4">
+
+        <div class="dropdown-center">
+            <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,5">Nyast först</a>
+    
+            <ul class="dropdown-menu" style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                <form action="{% url 'blog' %}">
+                    <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="desc">Nyast först</button>
+                    <li class="border-bottom"></li>
+                    <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="asc">Äldst först</button>
+                </form>
+            </ul>
+        </div>
+
+    </div>    
+
     <div class="row mt-4">
         {% for post in post_list %}
         <div class="col-md-4 mb-4">
@@ -34,7 +51,7 @@
         <div class="row mb-4">
             <div class="col text-end p-0">
                 {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}"
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort_by }}"
                     class="note-btn text-decoration-none border-end-0 rounded-end-0"><i
                         class="fa-solid fa-angle-left"></i> Föregående</a>
                 {% else %}
@@ -52,7 +69,7 @@
                     <ul class="dropdown-menu"
                         style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
                         {% for i in paginator.page_range %}
-                        <li><a class="dropdown-item note-btn border-0" href="?page={{ i }}"><strong>{{ i }}</strong> av
+                        <li><a class="dropdown-item note-btn border-0" href="?page={{ i }}&sort={{ sort_by }}"><strong>{{ i }}</strong> av
                                 {{ page_obj.paginator.num_pages }}</a></li>
                         {% if not forloop.last %}
                         <li class="border-bottom"></li>
@@ -64,7 +81,7 @@
 
             <div class="col p-0">
                 {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}"
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort_by }}"
                     class="note-btn text-decoration-none border-start-0 rounded-start-0">Nästa <i
                         class="fa-solid fa-angle-right"></i></a>
                 {% else %}

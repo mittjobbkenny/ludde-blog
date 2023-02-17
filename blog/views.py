@@ -11,9 +11,28 @@ from .forms import PostForm, CommentForm
 class PostList(generic.ListView):
 
     model = Post
-    queryset = Post.objects.order_by('-created_on')
     template_name = 'blog/blog.html'
     paginate_by = 6
+
+    def get_queryset(self):
+        posts_all = Post.objects.all()
+        sort_by = self.request.GET.get('sort')
+        if sort_by == 'desc':
+            posts_all = posts_all.order_by('-created_on')
+        elif sort_by == 'asc':
+            posts_all = posts_all.order_by('created_on')
+        else:
+            posts_all = posts_all.order_by('-created_on')
+        return posts_all
+    
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        sort_by = self.request.GET.get('sort')
+        if sort_by:
+            context['sort_by'] = sort_by
+        else:
+            context['sort_by'] = 'desc'
+        return context
 
 
 class PostDetail(FormMixin, generic.DetailView):
