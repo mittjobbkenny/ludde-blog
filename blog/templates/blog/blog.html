@@ -15,30 +15,39 @@
             </ol>
         </nav>
 
-        <div class="dropdown-center">
-            <span class="text-muted">Sortera efter</span>
-            <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false" data-bs-offset="0,5">
-                {% if sort_by == 'asc' %} Äldst först {% else %} Nyast först {% endif %}
-            </a>
+        <div class="d-flex">
+            <div class="dropdown-center">
+                <span class="text-muted">Sortera efter</span>
+                <a class="note-btn dropdown-toggle text-decoration-none rounded-end-0" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,5">
+                    {% if sort_by == 'asc' %} Äldst först {% else %} Nyast först {% endif %}
+                </a>
 
-            <ul class="dropdown-menu"
-                style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
-                <form action="{% url 'blog' %}">
-                    <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="desc">Nyast
-                        först</button>
-                    <li class="border-bottom"></li>
-                    <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="asc">Äldst
-                        först</button>
-                </form>
-            </ul>
+                <ul class="dropdown-menu"
+                    style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                    <form action="{% url 'blog' %}">
+                        <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="desc">Nyast
+                            först</button>
+                        <li class="border-bottom"></li>
+                        <button class="dropdown-item note-btn border-0" type="submit" name="sort" value="asc">Äldst
+                            först</button>
+                    </form>
+                </ul>
+            </div>
+
+            <form action="{% url 'blog' %}" class="d-none d-md-block">
+                {% if thumb == 'grid' %}<button class="note-btn border-start-0 rounded-start-0" type="submit"
+                    name="thumb" value="list"><i class="fa-solid fa-list"></i></button>{% endif %}
+                {% if thumb == 'list' %}<button class="note-btn border-start-0 rounded-start-0" type="submit"
+                    name="thumb" value="grid"><i class="fa-solid fa-table-cells"></i></button>{% endif %}
+            </form>
         </div>
 
     </div>
 
     <div class="row gx-md-5">
         {% for post in post_list %}
-        <div class="col-md-4 mb-4">
+        <div class="{% if thumb == 'grid' %}col-md-4{% endif %} mb-4">
             <div class="card border-0">
                 <div class="card-body p-0">
                     <div class="image-container">
@@ -47,9 +56,13 @@
                         </a>
                     </div>
                     <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
-                        <h2 class="card-title mt-2">{{ post.title | truncatechars:15 }}</h2>
+                        <h2 class="card-title mt-2">{% if thumb == 'grid' %}
+                            {{ post.title | truncatechars:15 }}{% else %}{{ post.title | truncatechars:30 }}
+                            {% endif %}</h2>
                     </a>
-                    <p class="card-text">{{ post.content | striptags | truncatechars:30 }}</p>
+                    <p class="card-text">{% if thumb == 'grid' %}
+                        {{ post.content | striptags | truncatechars:30 }}
+                        {% else %}{{ post.content | striptags | truncatechars:60 }}{% endif %}</p>
                     <hr>
                     <div class="d-flex justify-content-between">
                         <p class="card-text text-muted h6">{{ post.created_on }}</p>
@@ -68,7 +81,7 @@
         <div class="row mb-4">
             <div class="col text-end p-0">
                 {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort_by }}"
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort_by }}&thumb={{ thumb }}"
                     class="note-btn text-decoration-none border-end-0 rounded-end-0"><i
                         class="fa-solid fa-angle-left"></i> Föreg.</a>
                 {% else %}
@@ -87,7 +100,7 @@
                         style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
                         {% for i in paginator.page_range %}
                         <li><a class="dropdown-item note-btn border-0"
-                                href="?page={{ i }}&sort={{ sort_by }}"><strong>{{ i }}</strong> av
+                                href="?page={{ i }}&sort={{ sort_by }}&thumb={{ thumb }}"><strong>{{ i }}</strong> av
                                 {{ page_obj.paginator.num_pages }}</a></li>
                         {% if not forloop.last %}
                         <li class="border-bottom"></li>
@@ -99,7 +112,7 @@
 
             <div class="col p-0">
                 {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort_by }}"
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort_by }}&thumb={{ thumb }}"
                     class="note-btn text-decoration-none border-start-0 rounded-start-0">Nästa <i
                         class="fa-solid fa-angle-right"></i></a>
                 {% else %}

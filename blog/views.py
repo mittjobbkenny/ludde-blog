@@ -24,15 +24,23 @@ class PostList(generic.ListView):
         else:
             posts_all = posts_all.order_by('-created_on')
         return posts_all
-    
+
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
+        context['num_posts'] = Post.objects.all().count()
+
+        display_thumb = self.request.GET.get('thumb')
+        if display_thumb == 'list':
+            context['thumb'] = 'list'
+        else:
+            context['thumb'] = 'grid'
+
         sort_by = self.request.GET.get('sort')
         if sort_by:
             context['sort_by'] = sort_by
         else:
             context['sort_by'] = 'desc'
-        context['num_posts'] = Post.objects.all().count()
+
         return context
 
 
