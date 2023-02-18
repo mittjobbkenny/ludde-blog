@@ -3,7 +3,7 @@
 
 <div class="container">
 
-    <div class="d-md-flex justify-content-between mt-4">
+    <div class="d-md-flex justify-content-between align-items-baseline mt-4 mb-2">
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -36,11 +36,11 @@
 
     </div>
 
-    <div class="row">
+    <div class="row gx-md-5">
         {% for post in post_list %}
         <div class="col-md-4 mb-4">
             <div class="card border-0">
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div class="image-container">
                         <a href="{% url 'post_detail' post.slug post.pk %}">
                             <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
