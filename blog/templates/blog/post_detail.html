@@ -80,12 +80,32 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 mt-4">
-            <p class="h5" style="margin-top: 10px;"><u>
+        <div class="col-md-4 d-md-flex justify-content-between mt-3">
+            <p class="h5"><u>
                     Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
             </p>
+
+            <div class="dropdown-center">
+                <span class="text-muted">Sortera efter</span>
+                <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-offset="0,5">
+                    {% if asc_com == 'asc_com' %} Äldst först {% else %} Nyast först {% endif %}
+                </a>
+
+                <ul class="dropdown-menu"
+                    style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                    <form action="{% url 'post_detail' post.slug post.pk %}">
+                        <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
+                            value="desc_com">Nyast först</button>
+                        <li class="border-bottom"></li>
+                        <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
+                            value="asc_com">Äldst först</button>
+                    </form>
+                </ul>
+            </div>
+
         </div>
-        <div class="col-md-8 mt-1">
+        <div class="col-md-8">
             <ol class="p-0" reversed style="list-style-position:inside;">
                 <hr class="text-muted">
                 {% for comment in comments %}
@@ -146,7 +166,8 @@
                 <hr class="text-muted">
                 {% endfor %}
                 <button id="commentShow" class="note-btn rounded-end-0"></button>
-                <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0" style="margin-left: -4px !important;">Visa alla</button>
+                <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0"
+                    style="margin-left: -4px !important;">Visa alla</button>
             </ol>
         </div>
     </div>

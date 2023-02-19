@@ -58,6 +58,13 @@ class PostDetail(FormMixin, generic.DetailView):
         context['comments'] = self.object.comments.order_by('-created_on')
         context['liked'] = self.object.likes.filter(id=self.request.user.id).exists()
         context['commented'] = self.object.comments.filter(author=self.request.user.id).exists()
+        sort_com = self.request.GET.get('sort_com')
+        if sort_com == 'asc_com':
+            context['comments'] = self.object.comments.order_by('created_on')
+            context['asc_com'] = 'asc_com'
+        else:
+            context['comments'] = self.object.comments.order_by('-created_on')
+            context['desc_com'] = 'desc_com'
         return context
 
     def post(self, request, *args, **kwargs):
