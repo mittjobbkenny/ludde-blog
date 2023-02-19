@@ -86,56 +86,58 @@
             </p>
         </div>
         <div class="col-md-8 mt-1">
-            <ol reversed style="list-style-position:inside;">
+            <ol class="p-0" reversed style="list-style-position:inside;">
                 <hr class="text-muted">
                 {% for comment in comments %}
-                <li>
-                    <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
-                            {{ comment.created_on }}</small></span>
+                <div class="commentId" style="visibility: hidden; height: 0px;">
+                    <li>
+                        <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
+                                {{ comment.created_on }}</small></span>
 
-                    {% if request.user == comment.author %}
-                    <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
-                        data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
-                            class="fa-solid fa-edit"></i></button>
+                        {% if request.user == comment.author %}
+                        <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
+                                class="fa-solid fa-edit"></i></button>
 
-                    <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button type="button"
-                            class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
-                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
-                                class="fa-solid fa-x"></i></button></span>
+                        <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
+                                type="button" class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
+                                    class="fa-solid fa-x"></i></button></span>
 
-                    <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
-                        aria-labelledby="commentModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="commentModalLabel"><i
-                                            class="fa-solid fa-circle-exclamation"></i> Radera kommentar</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <span class="text-capitalize h6 "><u>{{ comment.author }}</u> <small
-                                            class="text-muted">
-                                            {{ comment.created_on }}</small></span>
-                                    <p>{{ comment.body | safe | linebreaks | truncatechars:100 }}</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="{% url 'comment_delete' post.slug comment.pk %}" method="POST"
-                                        class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-dark btn-sm">Radera</button>
-                                    </form>
-                                    <button type="button" class="btn btn-outline-dark btn-sm"
-                                        data-bs-dismiss="modal">Avbryt</button>
+                        <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
+                            aria-labelledby="commentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="commentModalLabel"><i
+                                                class="fa-solid fa-circle-exclamation"></i> Radera kommentar</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span class="text-capitalize h6 "><u>{{ comment.author }}</u> <small
+                                                class="text-muted">
+                                                {{ comment.created_on }}</small></span>
+                                        <p>{{ comment.body | safe | linebreaks | truncatechars:100 }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{% url 'comment_delete' post.slug comment.pk %}" method="POST"
+                                            class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-dark btn-sm">Radera</button>
+                                        </form>
+                                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                            data-bs-dismiss="modal">Avbryt</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {% endif %}
+                        {% endif %}
 
-                    <p>{{ comment.body | safe | linebreaks }}</p>
-                </li>
-                <hr class="text-muted">
+                        <p>{{ comment.body | safe | linebreaks }}</p>
+                    </li>
+                    <hr class="text-muted">
+                </div>
                 {% empty %}
                 <div>
                     0. <span class="h6"><u> Kommentarer</u> <small class="text-muted">
@@ -143,6 +145,8 @@
                 </div>
                 <hr class="text-muted">
                 {% endfor %}
+                <button id="commentShow" class="note-btn rounded-end-0"></button>
+                <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0" style="margin-left: -4px !important;">Visa alla</button>
             </ol>
         </div>
     </div>
@@ -197,8 +201,44 @@
     });
 
     {% if not user.is_authenticated %}
-    $(".note-editable").attr("contenteditable", "false")
+    $(".note-editable").attr("contenteditable", "false");
     {% endif %}
+
+    let numcommentId = $(".commentId").length;
+
+    $(".commentId").slice(0, 3).css({ "visibility": "visible", "height": "100%" });
+
+    $(function () {
+        if (numcommentId >= 6) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till ${numcommentId - 6}`);
+        } else if (numcommentId <= 6 && numcommentId > 3) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till 0`);
+        } else {
+            $("#commentShow").hide();
+            $("#commentShowAll").hide();
+        }
+    });
+
+    $("#commentShow").click(function () {
+        $(".commentId").slice(3, 6).css({ "visibility": "visible", "height": "100%" }).hide().slideDown();
+        $(".commentId").slice(0, 3).removeClass('commentId');
+        numcommentId = $(".commentId").length;
+
+        if (numcommentId >= 6) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till ${numcommentId - 6}`);
+        } else if (numcommentId <= 6 && numcommentId > 3) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till 0`);
+        } else {
+            $("#commentShow").hide();
+            $("#commentShowAll").hide();
+        }
+    });
+
+    $("#commentShowAll").click(function () {
+        $(".commentId").css({ "visibility": "visible", "height": "100%" });
+        $("#commentShow").hide();
+        $("#commentShowAll").hide();
+    });
 
 </script>
 
