@@ -37,9 +37,11 @@
 
             <form action="{% url 'blog' %}" class="d-none d-md-block">
                 {% if thumb == 'grid' %}<button class="note-btn border-start-0 rounded-start-0" type="submit"
-                    name="thumb" value="list"><i class="fa-solid fa-list"></i></button>{% endif %}
+                    name="thumb" value="list" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                    data-bs-title="Visa lista"><i class="fa-solid fa-list"></i></button>{% endif %}
                 {% if thumb == 'list' %}<button class="note-btn border-start-0 rounded-start-0" type="submit"
-                    name="thumb" value="grid"><i class="fa-solid fa-table-cells"></i></button>{% endif %}
+                    name="thumb" value="grid" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                    data-bs-title="Visa nät"><i class="fa-solid fa-table-cells"></i></button>{% endif %}
             </form>
         </div>
 
@@ -128,6 +130,10 @@
 
 
 <script>
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+
     $("#firstPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + 1 );
     $("#lastPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + {{ post_list | length }} );
 </script>

@@ -32,97 +32,101 @@
         <div class="col">
             <hr>
             <div class="d-block d-md-flex justify-content-between align-items-center">
-                <div class="mb-4">
+                <div class="pb-2 pb-md-0">
                     <p class="card-text text-muted h6">{{ post.created_on }}</p>
                 </div>
+
                 <div class="d-flex align-items-center">
                     {% if user.is_authenticated %}
-                    <form action="{% url 'post_like' post.slug post.pk %}" method="POST">
+                    <form action="{% url 'post_like' post.slug post.pk %}" method="POST" class="me-1">
                         {% csrf_token %}
                         {% if liked %}
-                        <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="note-btn rounded-end-0"
-                            aria-label="like" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Ta bort gilla">
+                        <button type="submit" name="blogpost_id" value="{{ post.slug }}"
+                            class="btn btn-sm btn-dark active" aria-label="like" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Ta bort gilla">
                             <strong>{{ post.number_of_likes }}</strong>
-                            <i class="fa-solid fa-thumbs-up"></i></button>
+                            <i class="fa-solid fa-thumbs-up"></i> Gillar</button>
                         {% else %}
-                        <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="note-btn rounded-end-0"
+                        <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn btn-sm btn-dark"
                             aria-label="like" data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-title="Lägg till gilla">
                             <strong>{{ post.number_of_likes }}</strong>
                             <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
                         {% endif %}
                     </form>
-                    {% else %}
-                    <span class="text-secondary text-muted">{{ post.number_of_likes }} <i
-                            class="fa-regular fa-thumbs-up"></i></span>
                     {% endif %}
                     {% with comments.count as total_comments %}
                     {% if user.is_authenticated %}
                     {% if commented %}
-                    <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
+                    <button id="commentBtn" class="btn btn-sm btn-dark active" aria-label="comment"
                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                        <strong>{{ total_comments }}</strong> <i class="fa-solid fa-comments"></i></button>
+                        <strong>{{ total_comments }}</strong> <i class="fa-solid fa-comments"></i> Kommenterat</button>
                     {% else %}
-                    <button id="commentBtn" class="note-btn border-start-0 rounded-start-0" aria-label="comment"
-                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
+                    <button id="commentBtn" class="btn btn-sm btn-dark" aria-label="comment" data-bs-toggle="tooltip"
+                        data-bs-placement="top" data-bs-title="Lägg till kommentar">
                         <strong>{{ total_comments }}</strong> <i class="fa-regular fa-comments"></i>
                         Kommentera</button>
                     {% endif %}
                     {% else %}
-                    <span class="text-secondary text-muted"><strong>{{ total_comments }}</strong> <i
-                            class="fa-regular fa-comments"></i></span>
+                    <p class="card-text text-muted h6">{{ post.number_of_likes }} <i
+                            class="fa-regular fa-thumbs-up"></i> &#8739; {{ post.comments.count }} <i
+                            class="fa-regular fa-comments"></i></p>
                     {% endif %}
                     {% endwith %}
                 </div>
             </div>
+            <hr>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 d-md-flex justify-content-between mt-3">
-            <p class="h5"><u>
-                    Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
-            </p>
+    <div class="row mt-md-4">
+        <div class="col col-md-auto mx-auto">
 
-            <div class="dropdown-center">
-                <span class="text-muted">Sortera efter</span>
-                <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" data-bs-offset="0,5">
-                    {% if asc_com == 'asc_com' %} Äldst först {% else %} Nyast först {% endif %}
-                </a>
+            <div class="d-md-flex justify-content-between align-items-baseline text-center">
+                <span class="h5 me-5">
+                    <u>Kommentarer</u>({% with comments.count as total_comments %}{{ total_comments }}{% endwith %})
+                </span>
 
-                <ul class="dropdown-menu"
-                    style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
-                    <form action="{% url 'post_detail' post.slug post.pk %}">
-                        <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
-                            value="desc_com">Nyast först</button>
-                        <li class="border-bottom"></li>
-                        <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
-                            value="asc_com">Äldst först</button>
-                    </form>
-                </ul>
+                <div class="dropdown-center pt-2 pt-md-0">
+                    <span class="ms-auto p-1 text-muted">Sortera efter</span>
+
+                    <a class="note-btn dropdown-toggle text-decoration-none" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" data-bs-offset="0,5">
+                        {% if asc_com == 'asc_com' %} Äldst först {% else %} Nyast först {% endif %}
+                    </a>
+
+                    <ul class="dropdown-menu"
+                        style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                        <form action="{% url 'post_detail' post.slug post.pk %}">
+                            <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
+                                value="desc_com">Nyast först</button>
+                            <li class="border-bottom"></li>
+                            <button class="dropdown-item note-btn border-0" type="submit" name="sort_com"
+                                value="asc_com">Äldst först</button>
+                        </form>
+                    </ul>
+                </div>
             </div>
 
-        </div>
-        <div class="col-md-8">
             <ol class="p-0" reversed style="list-style-position:inside;">
-                <hr class="text-muted">
+                <hr>
                 {% for comment in comments %}
                 <div class="commentId" style="visibility: hidden; height: 0px;">
-                    <li>
+                    <li class="position-relative">
                         <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
                                 {{ comment.created_on }}</small></span>
 
                         {% if request.user == comment.author %}
-                        <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
-                            data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
-                                class="fa-solid fa-edit"></i></button>
+                        <span class="position-absolute top-0 end-0">
+                            <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
+                                data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
+                                    class="fa-solid fa-edit"></i></button>
 
-                        <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
-                                type="button" class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
-                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
-                                    class="fa-solid fa-x"></i></button></span>
+                            <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
+                                    type="button" class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
+                                        class="fa-solid fa-x"></i></button></span>
+                        </span>
 
                         <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
                             aria-labelledby="commentModalLabel" aria-hidden="true">
@@ -130,7 +134,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="commentModalLabel"><i
-                                                class="fa-solid fa-circle-exclamation"></i> Radera kommentar</h1>
+                                                class="fa-solid fa-circle-exclamation fa-beat-fade text-danger"></i>
+                                            Radera kommentar</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
@@ -138,7 +143,9 @@
                                         <span class="text-capitalize h6 "><u>{{ comment.author }}</u> <small
                                                 class="text-muted">
                                                 {{ comment.created_on }}</small></span>
-                                        <p>{{ comment.body | safe | linebreaks | truncatechars:100 }}</p>
+                                        <div class="px-3">
+                                            <p>{{ comment.body | safe | linebreaks | truncatechars:100 }}</p>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <form action="{% url 'comment_delete' post.slug comment.pk %}" method="POST"
@@ -154,20 +161,26 @@
                         </div>
                         {% endif %}
 
-                        <p>{{ comment.body | safe | linebreaks }}</p>
+                        <div class="px-md-3">
+                            <p>{{ comment.body | safe | linebreaks }}</p>
+                        </div>
                     </li>
-                    <hr class="text-muted">
+                    {% if not forloop.last %}
+                    <hr>
+                    {% endif %}
                 </div>
                 {% empty %}
                 <div>
                     0. <span class="h6"><u> Kommentarer</u> <small class="text-muted">
                             sedan {{ post.created_on }}</small></span>
                 </div>
-                <hr class="text-muted">
+                <hr>
                 {% endfor %}
-                <button id="commentShow" class="note-btn rounded-end-0"></button>
-                <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0"
-                    style="margin-left: -4px !important;">Visa alla</button>
+                <div class="text-center">
+                    <button id="commentShow" class="note-btn rounded-end-0"></button>
+                    <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0"
+                        style="margin-left: -4px !important;">Visa alla</button>
+                </div>
             </ol>
         </div>
     </div>
