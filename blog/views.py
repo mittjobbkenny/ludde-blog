@@ -65,6 +65,7 @@ class PostDetail(FormMixin, generic.DetailView):
         else:
             context['comments'] = self.object.comments.order_by('-created_on')
             context['desc_com'] = 'desc_com'
+        context['update_form'] = CommentForm()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -124,6 +125,32 @@ class CommentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView)
         post = Post.objects.get(pk=self.object.post.pk)
         messages.info(self.request, 'Kommentar borttagen')
         return post.get_absolute_url()
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False
+
+
+class CommentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+
+    model = Comment
+    template_name = 'blog/post_detail.html'
+    form_class = CommentForm
+
+    def get_success_url(self):
+        post = Post.objects.get(pk=self.object.post.pk)
+        return post.get_absolute_url()
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.info(self.request, 'Kommentar uppdaterad')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.info(self.request, 'Kommentar ej uppdaterad')
+        return HttpResponseRedirect(self.get_success_url())
 
     def test_func(self):
         comment = self.get_object()

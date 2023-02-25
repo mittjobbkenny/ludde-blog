@@ -118,29 +118,63 @@
 
                         {% if request.user == comment.author %}
                         <span class="position-absolute top-0 end-0">
-                            <button type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
-                                data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
-                                    class="fa-solid fa-edit"></i></button>
 
-                            <span data-bs-toggle="modal" data-bs-target="#commentModal{{ comment.pk }}"><button
+                            <span data-bs-toggle="modal" data-bs-target="#commentUModal{{ comment.pk }}"><button
+                                    type="button" class="note-btn rounded-end-0 p-1 px-2" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Uppdatera kommentar"><i
+                                        class="fa-solid fa-edit"></i></button></span>
+
+                            <span data-bs-toggle="modal" data-bs-target="#commentDModal{{ comment.pk }}"><button
                                     type="button" class="note-btn rounded-start-0 p-1 px-2" style="margin-left: -5px;"
                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Radera kommentar"><i
                                         class="fa-solid fa-x"></i></button></span>
                         </span>
 
-                        <div class="modal fade" id="commentModal{{ comment.pk }}" tabindex="-1"
-                            aria-labelledby="commentModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="commentUModal{{ comment.pk }}" tabindex="-1"
+                            aria-labelledby="commentUModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="commentUModalLabel"><i
+                                                class="fa-solid fa-circle-exclamation text-muted fa-beat-fade"
+                                                style="--fa-beat-fade-opacity: 0.67;"></i>
+                                            Uppdatera kommentar</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-capitalize h6"><u>{{ comment.author }}</u> <small
+                                                class="text-muted">
+                                                {{ comment.created_on }}</small></p>
+                                        <form id="updateForm{{comment.id}}"
+                                            action="{% url 'comment_update' post.slug comment.pk %}" method="POST"
+                                            class="d-inline" novalidate>
+                                            {% csrf_token %}
+                                            {{ update_form | crispy }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-dark btn-sm">Uppdatera</button>
+                                        </form>
+                                        <button type="button" class="btn btn-outline-dark btn-sm"
+                                            data-bs-dismiss="modal">Avbryt</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="commentDModal{{ comment.pk }}" tabindex="-1"
+                            aria-labelledby="commentDModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="commentModalLabel"><i
+                                        <h1 class="modal-title fs-5" id="commentDModalLabel"><i
                                                 class="fa-solid fa-circle-exclamation fa-beat-fade text-danger"></i>
                                             Radera kommentar</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <span class="text-capitalize h6 "><u>{{ comment.author }}</u> <small
+                                        <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small
                                                 class="text-muted">
                                                 {{ comment.created_on }}</small></span>
                                         <div class="px-3">
@@ -160,10 +194,18 @@
                             </div>
                         </div>
                         {% endif %}
-
                         <div class="px-md-3">
                             <p>{{ comment.body | safe | linebreaks }}</p>
                         </div>
+
+                        <div id="commentBody{{comment.id}}" class="d-none">
+                            {{ comment.body }}
+                        </div>
+
+                        <script>
+                            var commentBody = $('#commentBody{{comment.id}}').html()
+                            $("#updateForm{{comment.id}} textarea").html(commentBody.slice(29, -25));
+                        </script>
                     </li>
                     {% if not forloop.last %}
                     <hr>
@@ -200,42 +242,20 @@
 
 </div>
 
-<!-- Summernote -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-sv-SE.min.js"
-    integrity="sha512-tLdTOnY7hwU+YiYQnx7TWDyRQTfucM4Y0x+ePIBvRVOYZfoBwZZOd1o6BKRM2WMwwC8XgzyLNXOL0g4eR+G/0Q=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    $('.summernoteinplacewidget').summernote({
-        lang: 'sv-SE',
-        height: '200px',
-        disableDragAndDrop: true,
-        toolbar: [
-            ['font', ['bold', 'italic', 'underline']],
-        ],
-        placeholder: {% if user.is_authenticated %}'Kommentar...'{% else %}'Logga in för att kommentera.'{% endif %},
-        callbacks: {
-        onPaste: function (e) {
-            var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
-            e.preventDefault();
-            document.execCommand('insertText', false, bufferText);
-        }
-    }
-    });
-
     $("p").children("img").attr('alt', 'upload-img');
-
-    $(".note-editable").addClass('form-control');
-
-    $("#commentBtn").click(function () {
-        $('.note-editable').focus();
-    });
 
     $(function () {
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
 
+    $("#commentBtn").click(function () {
+        $('.form-control').focus();
+    });
+
     {% if not user.is_authenticated %}
-    $(".note-editable").attr("contenteditable", "false");
+    $(".form-control").attr("readonly", "true");
+    $(".form-control").attr("placeholder", "Logga in för att kommentera.");
     {% endif %}
 
     let numcommentId = $(".commentId").length;
