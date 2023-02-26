@@ -56,6 +56,13 @@
     });
 
     $(".note-editable").addClass('form-control');
+
+    $("#error_1_id_featured_image strong").html("Ingen fil har valts.");
+
+    if($("#error_1_id_content").length) {
+        $(".note-editable").addClass('is-invalid');
+        $(".note-editable").css("border", "1px solid #DD3545");
+    }
 </script>
 
 <style>
