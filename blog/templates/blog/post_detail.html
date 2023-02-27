@@ -23,7 +23,6 @@
                     <div class="px-md-3">
                         <p class="card-text">{{ post.content | safe }}</p>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -112,8 +111,8 @@
             <ol class="p-0" reversed style="list-style-position:inside;">
                 <hr>
                 {% for comment in comments %}
-                <div class="commentId" style="visibility: hidden; height: 0px;">
-                    <li class="position-relative">
+                <div class="comments-all commentId" style="visibility: hidden; height: 0px;">
+                    <li class="position-relative p-1 rounded">
                         <span class="text-capitalize h6"><u>{{ comment.author }}</u> <small class="text-muted">
                                 {{ comment.created_on }}</small></span>
 
@@ -223,6 +222,7 @@
                     <button id="commentShow" class="note-btn rounded-end-0"></button>
                     <button id="commentShowAll" class="note-btn border-start-0 rounded-start-0"
                         style="margin-left: -4px !important;">Visa alla</button>
+                    <button id="commentHide" class="note-btn" style="display: none;">Minimera Kommentarer</button>
                 </div>
             </ol>
         </div>
@@ -230,7 +230,7 @@
 
     <div class="row">
         <div class="col">
-            <form method="POST" enctype="multipart/form-data" novalidate>
+            <form id="addCommentForm" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {{ form | crispy }}
                 {% if user.is_authenticated %}
@@ -285,6 +285,7 @@
         } else {
             $("#commentShow").hide();
             $("#commentShowAll").hide();
+            $("#commentHide").show();
         }
     });
 
@@ -292,7 +293,41 @@
         $(".commentId").css({ "visibility": "visible", "height": "100%" });
         $("#commentShow").hide();
         $("#commentShowAll").hide();
+        $("#commentHide").show();
     });
+
+    $("#commentHide").click(function () {
+        $(".comments-all").addClass("commentId");
+        $(".commentId").css({ "visibility": "hidden", "height": "0px" });
+        $(".commentId").slice(0, 3).css({ "visibility": "visible", "height": "100%" });
+        numcommentId = $(".commentId").length;
+        if (numcommentId >= 6) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till ${numcommentId - 6}`);
+        } else if (numcommentId <= 6 && numcommentId > 3) {
+            $("#commentShow").html(`Visa kommentar ${numcommentId - 3} till 0`);
+        }
+        $("#commentShow").show();
+        $("#commentShowAll").show();
+        $("#commentHide").hide();
+    });
+
+    $("#addCommentForm textarea").attr("rows", "1");
+
+    {% if user.is_authenticated %}
+    $("#addCommentForm textarea").focus(function () {
+        $(this).animate({ rows: 10 }, 500);
+        $('html, body').animate({
+            scrollTop: $("#addCommentForm button").offset().top
+        }, 250);
+
+    });
+
+    $("#addCommentForm textarea").focusout(function () {
+        if (!$(this).val()) {
+            $(this).animate({ rows: 1 }, 500);
+        }
+    });
+    {% endif %}
 </script>
 
 {% endblock %}
