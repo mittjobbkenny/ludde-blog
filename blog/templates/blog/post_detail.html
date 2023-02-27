@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container">
+<div class="container py-4">
 
-    <div class="mt-4 mb-2">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog' %}"
-                        class="link-dark">Blog</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ post.title | truncatechars:30 }}</li>
-            </ol>
-        </nav>
-    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog' %}" class="link-dark">Blog</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ post.title | truncatechars:30 }}</li>
+        </ol>
+    </nav>
 
-    <div class="row mt-4">
+    <div class="row">
         <div class="col">
             <div class="card border-0">
-                <div class="card-body  p-0">
+                <div class="card-body p-0">
                     <div class="image-container">
                         <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
                     </div>
                     <h2 class="card-title mt-2 text-capitalize"><u>{{ post.title }}</u></h2>
-                    <p class="card-text">{{ post.content | safe }}</p>
+                    <div class="px-md-3">
+                        <p class="card-text">{{ post.content | safe }}</p>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -228,13 +229,12 @@
     </div>
 
     <div class="row">
-        <div class="col mb-4">
+        <div class="col">
             <form method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {{ form | crispy }}
-                <br>
                 {% if user.is_authenticated %}
-                <button type="submit" class="btn btn-dark">Lägg till</button>
+                <button type="submit" class="btn btn-dark mt-3">Lägg till</button>
                 {% endif %}
             </form>
         </div>
@@ -293,7 +293,6 @@
         $("#commentShow").hide();
         $("#commentShowAll").hide();
     });
-
 </script>
 
 {% endblock %}

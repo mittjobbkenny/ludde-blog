@@ -4,19 +4,14 @@
 
 {{ form.media }}
 
-<div class="container">
-    <div class="row mt-4">
+<div class="container py-4">
+    <div class="row">
         <div class="col">
-            <div class="card mb-4 border-0">
-                <div class="card-body p-0">
-                    <form method="POST" enctype="multipart/form-data" novalidate>
-                        {% csrf_token %}
-                        {{ form | crispy | safe }}
-                        <br>
-                        <button type="submit" class="btn btn-dark">Lägg till</button>
-                    </form>
-                </div>
-            </div>
+            <form method="POST" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {{ form | crispy | safe }}
+                <button type="submit" class="btn btn-dark mt-3">Lägg till</button>
+            </form>
         </div>
     </div>
 </div>
@@ -59,7 +54,7 @@
 
     $("#error_1_id_featured_image strong").html("Ingen fil har valts.");
 
-    if($("#error_1_id_content").length) {
+    if ($("#error_1_id_content").length) {
         $(".note-editable").addClass('is-invalid');
         $(".note-editable").css("border", "1px solid #DD3545");
     }
