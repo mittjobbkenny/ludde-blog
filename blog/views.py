@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -110,10 +111,46 @@ class PostAdd(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.info(self.request, 'Post tillagd')
         return super().form_valid(form)
 
     def test_func(self):
         return self.request.user.is_superuser
+
+
+class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+
+    model = Post
+    template_name = 'blog/post_update.html'
+    form_class = PostForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.info(self.request, 'Post uppdaterad')
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+
+class PostDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+
+    model = Post
+    template_name = 'post_detail.html'
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form):
+        messages.info(self.request, 'Post borttagen')
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
 
 
 class CommentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):

@@ -9,9 +9,11 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'post_add' %}" class="link-dark">Ny
-                    post</a>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog' %}" class="link-dark">Blog</a>
             </li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'post_detail' post.slug post.pk %}"
+                    class="link-dark">{{ post.title | truncatechars:30 }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Uppdatera post</li>
         </ol>
     </nav>
 
@@ -20,7 +22,7 @@
             <form method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {{ form | crispy | safe }}
-                <button type="submit" class="btn btn-dark mt-3">Lägg till</button>
+                <button type="submit" class="btn btn-dark mt-3">Uppdatera</button>
             </form>
         </div>
     </div>
@@ -68,6 +70,8 @@
         $(".note-editable").addClass('is-invalid');
         $(".note-editable").css("border", "1px solid #DD3545");
     }
+
+    $("#id_featured_image").css("margin-top", "15px");
 </script>
 
 <style>

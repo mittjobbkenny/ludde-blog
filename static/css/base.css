@@ -68,3 +68,11 @@ textarea, input {
 hr {
     color: #dae0e5; opacity: 1;
 }
+
+a {
+    color: #212529;
+}
+
+.form-check-input:checked {
+    background-color: #4D5154 !important;
+}

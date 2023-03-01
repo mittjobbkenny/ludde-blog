@@ -3,14 +3,75 @@
 
 <div class="container py-4">
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog' %}" class="link-dark">Blog</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">{{ post.title | truncatechars:30 }}</li>
-        </ol>
-    </nav>
+    <div class="d-md-flex justify-content-between align-items-baseline">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'blog' %}"
+                        class="link-dark">Blog</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title | truncatechars:30 }}</li>
+            </ol>
+        </nav>
+
+        {% if request.user == post.author %}
+        <div class="d-flex">
+
+            <a href="{% url 'post_update' post.slug post.pk %}" class="note-btn rounded-end-0 text-decoration-none"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Uppdatera post">Uppdatera <i
+                    class="fa fa-edit"></i></a>
+
+            <span data-bs-toggle="modal" data-bs-target="#PostDModal"><button type="button"
+                    class="note-btn rounded-start-0" style="margin-left: -5px;" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Radera post">Radera <i
+                        class="fa-solid fa-x"></i></button></span>
+
+            <div class="modal fade" id="PostDModal" tabindex="-1" aria-labelledby="PostDModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="PostDModalLabel"><i
+                                    class="fa-solid fa-circle-exclamation fa-beat-fade text-danger"></i>
+                                Radera post</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span class="text-capitalize h6"><u>{{ post.title | truncatechars:30 }}</u></span>
+                            <p>{{ post.content | striptags | truncatechars:60 }}</p>
+                            <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                        </div>
+
+                        <div class="modal-footer justify-content-between">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Radera denna post
+                                    {% if post.comments.count %}
+                                    och {{ post.comments.count }} kommentarer
+                                    {% endif %}
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <form id="postDelete" action="{% url 'post_delete' post.slug post.pk %}" method="POST"
+                                class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-dark btn-sm">Radera</button>
+                            </form>
+                            <button type="button" class="btn btn-outline-dark btn-sm"
+                                data-bs-dismiss="modal">Avbryt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
 
     <div class="row">
         <div class="col">
@@ -254,8 +315,8 @@
     });
 
     {% if not user.is_authenticated %}
-    $(".form-control").attr("readonly", "true");
-    $(".form-control").attr("placeholder", "Logga in för att kommentera.");
+    $("#addCommentForm .form-control").attr("readonly", "true");
+    $("#addCommentForm .form-control").attr("placeholder", "Logga in för att kommentera.");
     {% endif %}
 
     let numcommentId = $(".commentId").length;
@@ -328,6 +389,19 @@
         }
     });
     {% endif %}
+
+    $("#postDelete").addClass("disabled");
+    $("#postDelete :submit").addClass("disabled");
+
+    $("#flexCheckDefault").change(function () {
+        if ($(this).prop('checked')) {
+            $("#postDelete").removeClass("disabled");
+            $("#postDelete :submit").removeClass("disabled");
+        } else {
+            $("#postDelete").addClass("disabled");
+            $("#postDelete :submit").addClass("disabled");
+        }
+    });
 </script>
 
 {% endblock %}

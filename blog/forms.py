@@ -29,7 +29,7 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['title'].label = 'Ny post'
+        self.fields['title'].label = 'Namn post'
         self.fields['title'].widget.attrs['placeholder'] = 'Titel...'
         self.fields['featured_image'].label = 'Omslagsbild'
         self.fields['title'].widget.attrs['placeholder'] = 'Titel...'
