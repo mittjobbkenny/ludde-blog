@@ -53,11 +53,11 @@
     <div class="row gx-md-5">
         {% for post in post_list %}
         <div class="{% if thumb == 'grid' %}col-md-4{% endif %} mb-4">
-            <div class="card border-0">
+            <div class="card border-0 bg-transparent">
                 <div class="card-body p-0">
                     <div class="image-container">
                         <a href="{% url 'post_detail' post.slug post.pk %}">
-                            <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                            <img class="card-img-top rounded box-img" src="{{ post.featured_image.url }}" alt="img">
                         </a>
                     </div>
                     <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
@@ -141,5 +141,28 @@
     $("#lastPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + {{ post_list | length }} );
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.min.js"></script>
+<script>
+    window.addEventListener("load", () => {
+
+        const colorThief = new ColorThief();
+        const img = document.querySelectorAll(".box-img");
+
+        img.forEach(i => {
+            i.crossOrigin = "Anonymous";
+            if (i.complete) {
+                const dominantRGB = colorThief.getColor(i);
+                i.style.transition = "box-shadow 5s ease-in";
+                i.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px"
+            } else {
+                i.addEventListener("load", function () {
+                    const dominantRGB = colorThief.getColor(i);
+                    i.style.transition = "box-shadow 5s ease-in";
+                    i.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px";
+                });
+            }
+        })
+    });
+</script>
 
 {% endblock %}

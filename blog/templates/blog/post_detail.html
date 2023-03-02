@@ -37,7 +37,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p class="text-capitalize h6"><u>{{ post.title | truncatechars:30 }}</u></p>
+                            <p class="h6"><u>{{ post.title | truncatechars:30 }}</u></p>
                             <div class="px-3">
                                 <p>{{ post.content | striptags | truncatechars:60 }}</p>
                             </div>
@@ -77,12 +77,12 @@
 
     <div class="row">
         <div class="col">
-            <div class="card border-0">
+            <div class="card border-0 bg-transparent">
                 <div class="card-body p-0">
                     <div class="image-container">
-                        <img class="card-img-top rounded" src="{{ post.featured_image.url }}" alt="img">
+                        <img class="card-img-top rounded box-img-lg" src="{{ post.featured_image.url }}" alt="img">
                     </div>
-                    <h2 class="card-title mt-4 text-capitalize"><u>{{ post.title }}</u></h2>
+                    <h2 class="card-title mt-4"><u>{{ post.title }}</u></h2>
                     <div class="px-md-3">
                         <p class="card-text">{{ post.content | safe }}</p>
                     </div>
@@ -402,6 +402,29 @@
         } else {
             $("#postDelete").addClass("disabled");
             $("#postDelete :submit").addClass("disabled");
+        }
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.min.js"></script>
+<script>
+    window.addEventListener("load", () => {
+
+        const colorThief = new ColorThief();
+        const imgLg = document.querySelector(".box-img-lg");
+        imgLg.crossOrigin = 'Anonymous';
+
+        if (imgLg.complete) {
+            const dominantRGB = colorThief.getColor(imgLg);
+            imgLg.style.transition = "box-shadow 5s ease-in";
+            imgLg.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px";
+
+        } else {
+            imgLg.addEventListener('load', function () {
+                const dominantRGB = colorThief.getColor(imgLg);
+                imgLg.style.transition = "box-shadow 5s ease-in";
+                imgLg.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px";
+            });
         }
     });
 </script>
