@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-md-flex justify-content-between align-items-baseline">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post_search }}</li>
+                {% if num_search > 1 %}
+                <li class="breadcrumb-item active" aria-current="page"><strong id="firstPost"></strong> - <strong
+                        id="lastPost"></strong> av {{ num_search }}</li>
+                {% endif %}
+            </ol>
+        </nav>
+
+        <div class="d-flex">
+            <div class="dropdown-center">
+                <span class="text-muted">Sortera efter</span>
+                <a class="note-btn dropdown-toggle text-decoration-none rounded-end-0" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,5">
+                    {% if sort_by == 'asc' %} Äldst först {% else %} Nyast först {% endif %}
+                </a>
+
+                <ul class="dropdown-menu"
+                    style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                    <li><a href="?q={{ post_search }}&sort=desc" class="dropdown-item note-btn border-0">Nyast först</a>
+                    </li>
+                    <li class="border-bottom"></li>
+                    <li><a href="?q={{ post_search }}&sort=asc" class="dropdown-item note-btn border-0">Äldst först</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="d-none d-md-block">
+                {% if thumb == 'grid' %}
+                <a class="note-btn border-start-0 rounded-start-0"
+                    href="?q={{ post_search }}&sort={{ sort_by }}&thumb=list" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Visa lista"><i class="fa-solid fa-list"></i></a>
+                {% else %}
+                <a class="note-btn border-start-0 rounded-start-0"
+                    href="?q={{ post_search }}&sort={{ sort_by }}&thumb=grid" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Visa nät"><i class="fa-solid fa-table-cells"></i></a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row gx-md-5">
+        {% for post in post_list %}
+        <div class="{% if thumb == 'grid' %}col-md-4{% endif %} mb-4">
+            <div class="card border-0 bg-transparent">
+                <div class="card-body p-0">
+                    <div class="image-container">
+                        <a href="{% url 'post_detail' post.slug post.pk %}">
+                            <img class="card-img-top rounded box-img" src="{{ post.featured_image.url }}" alt="img">
+                        </a>
+                    </div>
+                    <a href="{% url 'post_detail' post.slug post.pk %}" class="link-dark">
+                        <h2 class="card-title mt-2">{% if thumb == 'grid' %}
+                            {{ post.title | truncatechars:15 }}{% else %}{{ post.title | truncatechars:30 }}
+                            {% endif %}</h2>
+                    </a>
+                    <p class="card-text">{% if thumb == 'grid' %}
+                        {{ post.content | striptags | truncatechars:30 }}
+                        {% else %}{{ post.content | striptags | truncatechars:60 }}{% endif %}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p class="card-text text-muted h6">{{ post.created_on }}</p>
+                        <p class="card-text text-muted h6">{{ post.number_of_likes }} <i
+                                class="fa-regular fa-thumbs-up"></i> &#8739; {{ post.comments.count }} <i
+                                class="fa-regular fa-comments"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="h6">0 träffar på sökning: <b>{{ post_search }}</b></p>
+            <br>
+            <p>Prova att söka på något annat.</p>
+            <span>Som exempelvis:</span>
+            {% for post in recent_posts %}
+            <a href="?q={{ post.title }}">{{ post.title | truncatewords:5 }}</a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <div class="row">
+            <div class="col text-end p-0">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&q={{ post_search }}&sort={{ sort_by }}&thumb={{ thumb }}"
+                    class="note-btn text-decoration-none border-end-0 rounded-end-0"><i
+                        class="fa-solid fa-angle-left"></i> Föreg.</a>
+                {% else %}
+                <button class="note-btn disabled border-end-0 rounded-end-0"><i class="fa-solid fa-angle-left"></i>
+                    Föreg.</button>
+                {% endif %}
+            </div>
+
+            <div class="col-auto p-0">
+                <span class="dropup-center dropup">
+                    <a class="note-btn dropdown-toggle text-decoration-none rounded-0" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,25">Sida
+                        <strong>{{ page_obj.number }}</strong> av {{ page_obj.paginator.num_pages }}</a>
+
+                    <ul class="dropdown-menu"
+                        style="max-height: 400px !important; overflow-y: auto !important; padding: 0 !important;">
+                        {% for i in paginator.page_range %}
+                        <li><a class="dropdown-item note-btn border-0"
+                                href="?page={{ i }}&q={{ post_search }}&sort={{ sort_by }}&thumb={{ thumb }}">
+                                <strong>{{ i }}</strong> av
+                                {{ page_obj.paginator.num_pages }}</a></li>
+                        {% if not forloop.last %}
+                        <li class="border-bottom"></li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </span>
+            </div>
+
+            <div class="col p-0">
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&q={{ post_search }}&sort={{ sort_by }}&thumb={{ thumb }}"
+                    class="note-btn text-decoration-none border-start-0 rounded-start-0">Nästa <i
+                        class="fa-solid fa-angle-right"></i></a>
+                {% else %}
+                <button class="note-btn disabled border-start-0 rounded-start-0">Nästa <i
+                        class="fa-solid fa-angle-right"></i></button>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+</div>
+
+
+<script>
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+
+    $("#firstPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + 1 );
+    $("#lastPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + {{ post_list | length }} );
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.min.js"></script>
+<script>
+    window.addEventListener("load", () => {
+
+        const colorThief = new ColorThief();
+        const img = document.querySelectorAll(".box-img");
+
+        img.forEach(i => {
+            i.crossOrigin = "Anonymous";
+            if (i.complete) {
+                const dominantRGB = colorThief.getColor(i);
+                i.style.transition = "box-shadow 5s ease-in";
+                i.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px"
+            } else {
+                i.addEventListener("load", function () {
+                    const dominantRGB = colorThief.getColor(i);
+                    i.style.transition = "box-shadow 5s ease-in";
+                    i.style.boxShadow = "rgb(" + dominantRGB + ") 0px 25px 100px -50px";
+                });
+            }
+        })
+    });
+</script>
+
+{% endblock %}

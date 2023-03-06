@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views import generic, View
+from django.http import Http404
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import FormMixin
@@ -194,3 +196,56 @@ class CommentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView)
         if self.request.user == comment.author:
             return True
         return False
+
+
+class SearchResults(generic.ListView):
+
+    model = Post
+    template_name = 'blog/search_results.html'
+    allow_empty = False
+    paginate_by = 6
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            object_list = Post.objects.filter(Q(title__icontains=query))
+            if not object_list:
+                messages.info(self.request, 'Inga träffar')
+                object_list = query
+                return object_list
+            sort_by = self.request.GET.get('sort')
+            if sort_by == 'desc':
+                object_list = object_list.order_by('-created_on')
+            elif sort_by == 'asc':
+                object_list = object_list.order_by('created_on')
+            else:
+                object_list = object_list.order_by('-created_on')
+            return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResults, self).get_context_data(**kwargs)
+        context['post_search'] = self.request.GET.get('q')
+        query = self.request.GET.get('q')
+        context['num_search'] = Post.objects.filter(Q(title__icontains=query)).count()
+        context['recent_posts'] = Post.objects.order_by('-created_on')[:3]
+
+        display_thumb = self.request.GET.get('thumb')
+        if display_thumb == 'list':
+            context['thumb'] = 'list'
+        else:
+            context['thumb'] = 'grid'
+
+        sort_by = self.request.GET.get('sort')
+        if sort_by:
+            context['sort_by'] = sort_by
+        else:
+            context['sort_by'] = 'desc'
+
+        return context
+
+    def dispatch(self, *args, **kwargs):
+        try:
+            return super().dispatch(*args, **kwargs)
+        except Http404:
+            messages.info(self.request, 'Sökfältet är tomt')
+            return redirect('blog')

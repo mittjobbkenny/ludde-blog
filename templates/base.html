@@ -52,9 +52,9 @@
                         <a class="nav-link">Kontakt</a>
                     </li>
                 </ul>
-                <form class="d-flex w-50" role="search">
+                <form class="d-flex w-50" role="search" action="{% url 'search_results' %}" method="GET">
                     <input class="form-control rounded-0 rounded-start bg-body-secondary" type="search"
-                        placeholder="Search" aria-label="Search">
+                        placeholder="Sök" aria-label="Search" name="q">
                     <button class="btn btn-dark rounded-0 rounded-end " type="submit"><i
                             class="fas fa-search"></i></button>
                 </form>
