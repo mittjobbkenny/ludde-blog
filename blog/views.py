@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.urls import reverse_lazy
+import json
 from django.views import generic, View
+from django.http import HttpResponse
 from django.http import Http404
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -249,3 +251,24 @@ class SearchResults(generic.ListView):
         except Http404:
             messages.info(self.request, 'Sökfältet är tomt')
             return redirect('blog')
+
+
+class SearchAuto(generic.ListView):
+    model = Post
+
+    def get(self, request):
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            query = request.GET.get('term', '')
+            posts = Post.objects.filter(title__contains=query)
+            results=[]
+            for post in posts:
+                post_json = {}
+                post_json['value'] = post.title
+                post_json['label'] = str(post.created_on)[:10]
+                post_json['img'] = post.featured_image.url
+                results.append(post_json)
+            data = json.dumps(results)
+        else:
+            return redirect('home')
+        mimetype = 'application/json'
+        return HttpResponse(data, mimetype)

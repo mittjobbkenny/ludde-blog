@@ -76,3 +76,8 @@ a {
 .form-check-input:checked {
     background-color: #4D5154 !important;
 }
+
+input[type="search"]::-webkit-search-cancel-button {
+    margin-left: 10px !important;
+    cursor: pointer;
+}

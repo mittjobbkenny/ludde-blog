@@ -53,9 +53,9 @@
                     </li>
                 </ul>
                 <form class="d-flex w-50" role="search" action="{% url 'search_results' %}" method="GET">
-                    <input class="form-control rounded-0 rounded-start bg-body-secondary" type="search"
-                        placeholder="Sök" aria-label="Search" name="q">
-                    <button class="btn btn-dark rounded-0 rounded-end " type="submit"><i
+                    <input class="form-control  bg-body-secondary pe-5" type="search" placeholder="Sök"
+                        aria-label="Search" name="q" id="tags">
+                    <button class="btn btn-dark rounded-0 rounded-end" type="submit" style="margin-left: -42px;"><i
                             class="fas fa-search"></i></button>
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
@@ -104,6 +104,72 @@
     </main>
 
     <footer class="mt-auto bg-dark"></footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet"
+        type="text/css" />
+
+    <script type="text/javascript">
+        $(function () {
+            $("#tags").autocomplete({
+                source: '{% url 'search_auto' %}',
+                minLength: 1,
+            }).data("autocomplete")._renderItem = function (ul, item) {
+                if (item.value.length > 30) {
+                    var itemValue = jQuery.trim(item.value).substring(0, 20).trim(this) + "...";
+                } else {
+                    var itemValue = item.value;
+                }
+                return $("<li></li>")
+                    .data("item.autocomplete", item)
+                    .append(`<a class="d-flex align-items-center"><img src="${item.img}" 
+                        height="50" width="50" style="width:50px!important; margin:0!important;" class="rounded pe-2" /> 
+                        ${itemValue}<small class="text-muted ms-auto">${item.label}</small></a><hr class="m-0 p-0">`)
+                    .appendTo(ul);
+            };
+        });
+    </script>
+
+    <style>
+        .ui-menu {
+            max-height: 50vh;
+            overflow: hidden;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background: white !important;
+            padding: 0 !important;
+        }
+
+        .ui-menu .ui-menu-item a:hover {
+            cursor: pointer;
+            color: black !important;
+            background: #E9ECEF !important;
+            border-color: transparent !important;
+        }
+
+        .ui-state-hover {
+            color: black !important;
+            background: #E9ECEF !important;
+            border-color: transparent !important;
+        }
+
+        .ui-menu .ui-menu-item img {
+            object-fit: cover;
+        }
+
+        .ui-widget li:nth-child(n+10) {
+            display: none;
+        }
+
+        .ui-widget li:nth-child(n+9) hr {
+            display: none;
+        }
+
+        .ui-widget li:last-child hr {
+            display: none;
+        }
+    </style>
 
 </body>
 

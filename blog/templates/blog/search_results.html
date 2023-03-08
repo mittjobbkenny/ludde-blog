@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'home' %}" class="link-dark">Hem</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ post_search }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post_search | truncatechars:30 }}</li>
                 {% if num_search > 1 %}
                 <li class="breadcrumb-item active" aria-current="page"><strong id="firstPost"></strong> - <strong
                         id="lastPost"></strong> av {{ num_search }}</li>
@@ -145,6 +145,10 @@
 <script>
     $(function () {
         $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+
+    $(function () {
+        $("input[type='search']").val("{{ post_search }}");
     });
 
     $("#firstPost").html(({% if page_obj.has_previous %}'{{ page_obj.previous_page_number }}'{% else %} 0{% endif %} * 6) + 1 );
