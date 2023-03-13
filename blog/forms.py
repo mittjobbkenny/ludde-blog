@@ -1,6 +1,7 @@
 from django import forms
 from django_summernote.widgets import SummernoteInplaceWidget
 from .models import Post, Comment
+from .widgets import CustomClearableFileInput
 
 class CommentForm(forms.ModelForm):
 
@@ -26,6 +27,8 @@ class PostForm(forms.ModelForm):
         widgets = {
             'content': SummernoteInplaceWidget(),
         }
+
+    featured_image = forms.ImageField(label='Image', required=True, widget=CustomClearableFileInput)
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)

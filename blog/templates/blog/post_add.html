@@ -19,12 +19,31 @@
         <div class="col">
             <form method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
-                {{ form | crispy | safe }}
+                {% for field in form %}
+                {% if field.name != 'image' %}
+                {{ field | as_crispy_field | safe }}
+                {% else %}
+                {{ field }}
+                {% endif %}
+                {% endfor %}
                 <button type="submit" class="btn btn-dark mt-3">Lägg till</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    $('#new-image').change(function () {
+        var file = $('#new-image')[0].files[0];
+        $('#filename').text(`Vald bild: ${file.name}`);
+        var fReader = new FileReader();
+        fReader.readAsDataURL(file);
+        fReader.onloadend = function (event) {
+            var img = document.getElementById("imgname");
+            img.src = event.target.result;
+        }
+    });
+</script>
 
 <!-- Summernote -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-sv-SE.min.js"
@@ -62,7 +81,7 @@
 
     $(".note-editable").addClass('form-control');
 
-    $("#error_1_id_featured_image strong").html("Ingen fil har valts.");
+    $("#error_1_id_featured_image strong").html("Ingen bild har valts.");
 
     if ($("#error_1_id_content").length) {
         $(".note-editable").addClass('is-invalid');
@@ -74,6 +93,10 @@
     img {
         width: 300px;
         margin: 0 10px;
+    }
+
+    .invalid-feedback {
+        display: block !important;
     }
 </style>
 

@@ -1,0 +1,6 @@
+<img id="imgname" style="height:100px!important; width:100px!important; margin:0!important; object-fit: cover;"
+    class="rounded" src="{{ widget.value.url }}">
+<span class="btn btn-dark btn-img-upload">
+    Välj bild <input id="new-image" type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>
+</span>
+<p id="filename"></p>
