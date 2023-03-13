@@ -105,30 +105,35 @@
                         {% csrf_token %}
                         {% if liked %}
                         <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                            class="btn btn-sm btn-dark active" aria-label="like" data-bs-toggle="tooltip"
-                            data-bs-placement="top" data-bs-title="Ta bort gilla">
-                            <strong>{{ post.number_of_likes }}</strong>
-                            <i class="fa-solid fa-thumbs-up"></i> Gillar</button>
+                            class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="like"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ta bort gilla">
+                            <span class="bg-dark p-2 m-0">
+                                <strong>{{ post.number_of_likes }}</strong>
+                                <i class="fa-solid fa-thumbs-up"></i></span> <span class="p-2">Gillar</span></button>
+
                         {% else %}
-                        <button type="submit" name="blogpost_id" value="{{ post.slug }}" class="btn btn-sm btn-dark"
-                            aria-label="like" data-bs-toggle="tooltip" data-bs-placement="top"
-                            data-bs-title="Lägg till gilla">
-                            <strong>{{ post.number_of_likes }}</strong>
-                            <i class="fa-regular fa-thumbs-up"></i> Gilla</button>
+                        <button type="submit" name="blogpost_id" value="{{ post.slug }}"
+                            class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="like"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till gilla">
+                            <span class="bg-dark p-2 m-0">
+                                <strong>{{ post.number_of_likes }}</strong>
+                                <i class="fa-regular fa-thumbs-up"></i></span> <span class="p-2">Gilla</span></button>
                         {% endif %}
                     </form>
                     {% endif %}
                     {% with comments.count as total_comments %}
                     {% if user.is_authenticated %}
                     {% if commented %}
-                    <button id="commentBtn" class="btn btn-sm btn-dark active" aria-label="comment"
+                    <button id="commentBtn" class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="comment"
                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                        <strong>{{ total_comments }}</strong> <i class="fa-solid fa-comments"></i> Kommenterat</button>
+                        <span class="bg-dark p-2 m-0"><strong>{{ total_comments }}</strong> <i
+                                class="fa-solid fa-comments"></i></span> <span class="p-2">Kommenterat</span></button>
                     {% else %}
-                    <button id="commentBtn" class="btn btn-sm btn-dark" aria-label="comment" data-bs-toggle="tooltip"
-                        data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                        <strong>{{ total_comments }}</strong> <i class="fa-regular fa-comments"></i>
-                        Kommentera</button>
+                    <button id="commentBtn" class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="comment"
+                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
+                        <span class="bg-dark p-2 m-0"><strong>{{ total_comments }}</strong> <i
+                                class="fa-regular fa-comments"></i></span>
+                        <span class="p-2">Kommentera</span></button>
                     {% endif %}
                     {% else %}
                     <p class="card-text text-muted h6">{{ post.number_of_likes }} <i
