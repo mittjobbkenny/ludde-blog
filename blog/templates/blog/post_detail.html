@@ -105,17 +105,17 @@
                         {% csrf_token %}
                         {% if liked %}
                         <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                            class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="like"
-                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ta bort gilla">
-                            <span class="bg-dark p-2 m-0">
+                            class="btn btn-sm btn-dark ps-0 overflow-hidden" aria-label="like" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Ta bort gilla">
+                            <span class="bg-secondary bg-gradient bg-opacity-25 p-2 m-0">
                                 <strong>{{ post.number_of_likes }}</strong>
                                 <i class="fa-solid fa-thumbs-up"></i></span> <span class="p-2">Gillar</span></button>
 
                         {% else %}
                         <button type="submit" name="blogpost_id" value="{{ post.slug }}"
-                            class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="like"
-                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till gilla">
-                            <span class="bg-dark p-2 m-0">
+                            class="btn btn-sm btn-dark ps-0 overflow-hidden" aria-label="like" data-bs-toggle="tooltip"
+                            data-bs-placement="top" data-bs-title="Lägg till gilla">
+                            <span class="bg-secondary bg-gradient bg-opacity-25 p-2 m-0">
                                 <strong>{{ post.number_of_likes }}</strong>
                                 <i class="fa-regular fa-thumbs-up"></i></span> <span class="p-2">Gilla</span></button>
                         {% endif %}
@@ -124,15 +124,16 @@
                     {% with comments.count as total_comments %}
                     {% if user.is_authenticated %}
                     {% if commented %}
-                    <button id="commentBtn" class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="comment"
+                    <button id="commentBtn" class="btn btn-sm btn-dark ps-0 overflow-hidden" aria-label="comment"
                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                        <span class="bg-dark p-2 m-0"><strong>{{ total_comments }}</strong> <i
-                                class="fa-solid fa-comments"></i></span> <span class="p-2">Kommenterat</span></button>
+                        <span class="bg-secondary bg-gradient bg-opacity-25 p-2 m-0">
+                            <strong>{{ total_comments }}</strong> <i class="fa-solid fa-comments"></i></span> <span
+                            class="p-2">Kommenterat</span></button>
                     {% else %}
-                    <button id="commentBtn" class="btn btn-sm btn-dark active ps-0 overflow-hidden" aria-label="comment"
+                    <button id="commentBtn" class="btn btn-sm btn-dark ps-0 overflow-hidden" aria-label="comment"
                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lägg till kommentar">
-                        <span class="bg-dark p-2 m-0"><strong>{{ total_comments }}</strong> <i
-                                class="fa-regular fa-comments"></i></span>
+                        <span class="bg-secondary bg-gradient bg-opacity-25 p-2 m-0">
+                            <strong>{{ total_comments }}</strong> <i class="fa-regular fa-comments"></i></span>
                         <span class="p-2">Kommentera</span></button>
                     {% endif %}
                     {% else %}
