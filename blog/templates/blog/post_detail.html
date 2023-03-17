@@ -91,11 +91,11 @@
         </div>
     </div>
 
-    <div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
+    <div class="modal fade modal-zoom" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content bg-transparent border-0">
                 <div class="modal-header border-0" data-bs-dismiss="modal">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close btn-close-white fade-in" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" data-bs-dismiss="modal">
@@ -329,6 +329,27 @@
 <style>
     img {
         cursor: pointer;
+    }
+
+    .modal.modal-zoom.fade:not(.show) .modal-dialog {
+        transform: scale(0.8);
+    }
+
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 1s;
+        animation-delay: 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
     }
 </style>
 
