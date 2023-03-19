@@ -354,10 +354,18 @@
 </style>
 
 <script>
-    $("img").click(function () {
-        let url = $(this).attr('src');
-        $('#imgModalSrc').attr('src', url);
-        $('#imgModal').modal('toggle');
+    $(function() {
+        $("img").click(function () {
+            let url = $(this).attr('src');
+            $('#imgModalSrc').attr('src', url);
+            $('.fade-in').css("visibility", "visible");
+            $('#imgModal').modal('toggle');
+        });
+
+        var imgModal = document.getElementById("imgModal");
+        imgModal.addEventListener("hide.bs.modal", function () {
+            $('.fade-in').css("visibility", "hidden");
+        });
     });
 
     $("p").children("img").attr('alt', 'upload-img');
