@@ -359,6 +359,11 @@
 
 <script>
     $(function () {
+        var imgSrc = [];
+        $("img").not(':last').each(function (e) {
+            if (this.src) { imgSrc.push(this.src); }
+        });
+
         $("img").click(function () {
             let url = $(this).attr('src');
             $('#imgModalSrc').attr('src', url);
@@ -371,15 +376,12 @@
             $('.fade-in').css("visibility", "hidden");
         });
 
-        var imgSrc = [];
-        $("img").not(':last').each(function (e) {
-            if (this.src) { imgSrc.push(this.src); }
-        });
-
         $("#imgModalSrcNext").click(function () {
             let url = $('#imgModalSrc').attr('src');
             let nextUrl = imgSrc[($.inArray(url, imgSrc) + 1) % imgSrc.length];
-            $('#imgModalSrc').attr('src', nextUrl);
+            if (!imgSrc.indexOf(nextUrl) - 1) {
+                $('#imgModalSrc').attr('src', nextUrl);
+            }
         });
 
         $("#imgModalSrcPrev").click(function () {
@@ -388,6 +390,20 @@
             $('#imgModalSrc').attr('src', prevUrl);
         });
 
+        $('#imgModalSrc').on('load', function () {
+            let url = $('#imgModalSrc').attr('src');
+            let nextUrl = imgSrc[($.inArray(url, imgSrc) + 1) % imgSrc.length];
+            if (!imgSrc.indexOf(nextUrl) - 1) {
+                $("#imgModalSrcNext").css("visibility", "visible");
+            } else {
+                $("#imgModalSrcNext").css("visibility", "hidden");
+            }
+            if (imgSrc.indexOf(url) == 0) {
+                $("#imgModalSrcPrev").css("visibility", "hidden");
+            } else {
+                $("#imgModalSrcPrev").css("visibility", "visible");
+            }
+        });
     });
 
     $("p").children("img").attr('alt', 'upload-img');
