@@ -94,10 +94,6 @@
     <div class="modal fade modal-zoom" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content bg-transparent border-0">
-                <div class="modal-header border-0" data-bs-dismiss="modal">
-                    <button type="button" class="btn-close btn-close-white fade-in" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
                 <div class="modal-body d-flex justify-content-between align-items-center">
                     <button id="imgModalSrcPrev" class="btn btn-lg text-white ms-auto"
                         style="border: none !important;"><i class="fa-solid fa-chevron-left"></i></button>
@@ -107,6 +103,8 @@
                     </div>
                     <button id="imgModalSrcNext" class="btn btn-lg text-white me-auto"
                         style="border: none !important;"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button type="button" class="btn-close btn-close-white fade-in position-absolute top-0 end-0 m-1"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>
